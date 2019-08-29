@@ -1,0 +1,71 @@
+/***********************************
+**        CAMBIA COLORES          **
+**            DEFAULT             **
+***********************************/
+.input-field input:focus + label{
+  color: #0d47a1 !important;
+}
+.row .input-field input:focus{
+  border-bottom: 1px solid #0d47a1 !important;
+  box-shadow: 0 1px 0 0 #0d47a1 !important;
+}
+textarea.materialize-textarea:focus:not([readonly]) {
+   border-bottom: 1px solid #0d47a1;
+   -webkit-box-shadow: 0 1px 0 0 #0d47a1;
+   box-shadow: 0 1px 0 0 #0d47a1;
+}
+.btnadd{
+ line-height: 40px !important;
+}
+.prefix{
+  color: #0d47a1 !important;
+}
+.dropdown-content li > a, .dropdown-content li:not(.disabled) > span{
+  color:#0d47a1 !important;
+}
+.tabs .tab a:hover, .tabs .tab a.active
+{
+    color: #0d47a1 !important;
+}
+.tabs .tab a
+{
+    color: #1565c0 ;
+}
+.btn, .picker__date-display,.picker__day--selected, .picker__day--selected:hover, .picker--focused .picker__day--selected, .tabs .indicator{
+  background-color: #0d47a1 ;
+}
+.btn:hover{
+  background-color: #1565c0 ;
+}
+.darken-blue{
+  background-color: #012242;
+}
+.side-nav li>a:hover, .side-nav li>a:hover>i.material-icons
+{
+    color: #0d47a1;
+  /*  border-bottom:#012242 1px solid; */
+}
+[type="checkbox"].filled-in:checked + label::after{
+  border:2px solid #0d47a1;
+  background-color:#0d47a1;
+}
+/***********************************
+ **            FIN                **
+ **        CAMBIA COLORES         **
+ ***********************************/
+.btn-floating
+{
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  border-radius: 25%;
+}
+.btn-floating i
+{
+  font-size: 1.1rem;
+  line-height: 25px;
+}
+#tbldatos > tbody > tr > td
+{
+  padding: 5px 5px;
+}
