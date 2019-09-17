@@ -55,19 +55,20 @@ function ejecutivo($id)
     return '';
   }
 }
+/*2019-08-29 *Mau Devuelve la cantidad de hijoe que tiene un deteminado grupo*/
 function numerohijos($cod)
 {
   $rows = 0;
- include '../conexion/conexion.php';
-  $sel = $con->prepare("SELECT count(*) rows FROM red_organizacional where codPadre = ? ");
+  include '../conexion/conexion.php';
+  $sel = $con->prepare("SELECT codigo FROM red_organizacional where codPadre = ? ");
   $sel->bind_param("s", $cod);
   $sel-> execute();
   $sel->store_result();
-  $sel ->bind_result($rows);
-  echo "<script>console.log('Debug test: " .$rows."' );</script>";
+  $rows = $sel->num_rows;
+  //echo "<script> console.log('Debug test: ".$cod." | ".$rows."');</script>";
   return $rows;
-
 }
+/*2019-08-29 Mau *Muestra el arbol y se llama recurvamente por cada grupo*/
 function mostrararbol($CodPadre)
 {
   $clase='';
@@ -77,23 +78,19 @@ function mostrararbol($CodPadre)
   $sel -> execute();
   $sel-> store_result();
   $sel -> bind_result($codigo, $descripcion, $nivel );
-  $row = $sel->num_rows;
+  $hijos = numerohijos($CodPadre);
 
-//  if($row > 0){
-        echo '<ul class="nested">';
-  //}
-    while ($sel->fetch()) {
-      if (numerohijos($codigo) == 1){
-            $clase = 'single';
-      }
-      else {
-          $clase = 'caret caret-down';
-      }
-          echo '<li class="nivel'.$nivel.'"><span class="'.$clase.'">'.$descripcion.'</span>';
-        echo '<div style="display: inline-table;"><a href="ingreso_ejecutivo.php?id=<?php echo $id ?>" class="btn-floating blue"> <i class="material-icons">edit</i></a></div>';
-          mostrararbol($codigo);
-
-        }
-       echo '</li></ul>';
+  if($hijos != 0){
+    echo '<ul>';
+  }
+  while ($sel->fetch()) {
+    //  echo '<li><i class="small material-icons">folder</i> '.$descripcion.'';
+    echo "<li id='".$codigo."' class='node'>".$descripcion."";
+    mostrararbol($codigo);
+  }
+  echo '</li>';
+  if($hijos != 0){
+    echo '</ul>';
+  }
 }
 ?>
