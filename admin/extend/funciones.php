@@ -93,4 +93,44 @@ function mostrararbol($CodPadre)
     echo '</ul>';
   }
 }
+function padre($id)
+{
+  include '../conexion/conexion.php';
+  $sel = $con->prepare("SELECT descripcion FROM red_organizacional WHERE codigo = ? ");
+  $sel->bind_param('i', $id);
+  $sel->execute();
+  $sel->bind_result($descripcion);
+  if($sel->fetch()){
+    return $descripcion;
+  }
+  else {
+    return '';
+  }
+}
+function nivel($id)
+{
+  include '../conexion/conexion.php';
+  $sel = $con->prepare("SELECT nivel+1 FROM red_organizacional WHERE codigo = ? ");
+  $sel->bind_param('i', $id);
+  $sel->execute();
+  $sel->bind_result($nivel);
+  if($sel->fetch()){
+    return $nivel;
+  }
+  else {
+    return 0;
+  }
+}
+function mayor($id)
+{
+  include '../conexion/conexion.php';
+  $sel = $con->prepare("SELECT max(codigo) FROM red_organizacional WHERE codpadre = ? ");
+  $sel->bind_param('i', $id);
+  $sel->execute();
+  $sel->bind_result($mayor);
+  if($sel->fetch()){
+    return $mayor;
+  }
+  return 0;
+}
 ?>

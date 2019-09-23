@@ -7,8 +7,8 @@ if ($_SERVER['REQUEST_METHOD']== 'POST'){
   $variable = "$".$campo."='".htmlentities($valor)."';";
   eval($variable);
   }
-  $up = $con->prepare("UPDATE red_organizacional SET descripcion=?, codpadre=?,nivel=?, orden=?  WHERE codigo=? ");
-  $up->bind_param('sssii', $descripcion, $codpadre, $codigo, $nivel, $orden);
+  $up = $con->prepare("UPDATE red_organizacional SET codigo=?, descripcion=?, codpadre=?,nivel=?, orden=?  WHERE id=? ");
+  $up->bind_param('sssiii', $codigo,$descripcion, $codpadre, $nivel, $orden, $id);
     if ($up -> execute()) {
      mostrararbol('000000000000000000000000000000000000000000000000000000000000');
   }else {
