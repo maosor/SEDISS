@@ -32,12 +32,14 @@
   border-left:1px solid
 }
 .tree li {
+  cursor: pointer;
   margin:0;
   padding:0 1em;
   line-height:2em;
   color:#369;
   font-weight:700;
   position:relative
+
 }
 .tree ul li:before {
   content:"";
@@ -71,6 +73,9 @@
   margin:0px 0px 0px 0px;
   padding:0px 0px 0px 0px;
   outline: 0;
+}
+.tree ul li:hover{
+  background-color: red;
 }
 </style>
   </head>

@@ -7,10 +7,20 @@ if ($_SERVER['REQUEST_METHOD']== 'POST'){
   $variable = "$".$campo."='".htmlentities($valor)."';";
   eval($variable);
   }
+  if($codpadre == '' or $codpadre == null )
+  {
+    $codpadre = '000000000000000000000000000000000000000000000000000000000000';
+  }
+  if ($tipo > 4)
+  {
+  $up = $con->prepare("UPDATE tipo_unidades_gestion SET codigo=?, descripcion=?, codpadre=?,nivel=?, orden=?,Hereda=?,TieneCamas=?,Comprensiva=?,UnidProdPrim=?, UnidProdSec=?,UnidProdValorRel1=?,UnidProdValorRel2=?  WHERE id=? ");
+  $up->bind_param('sssiiiiiissii', $codigo,$descripcion, $codpadre, $nivel, $orden, $id, $hereda, $camas, $comprensiva, $primaria, $secundaria, $prelativo, $srelativo);
+}else {
   $up = $con->prepare("UPDATE red_organizacional SET codigo=?, descripcion=?, codpadre=?,nivel=?, orden=?  WHERE id=? ");
   $up->bind_param('sssiii', $codigo,$descripcion, $codpadre, $nivel, $orden, $id);
+}
     if ($up -> execute()) {
-     mostrararbol('000000000000000000000000000000000000000000000000000000000000');
+     mostrararbol('000000000000000000000000000000000000000000000000000000000000',$tipo);
   }else {
     echo 'Error actualizando...';
   }
@@ -33,6 +43,8 @@ $con->close();
    });
  });
  $('.branch').dblclick(function(){
+   $('.selecionado').removeClass('selecionado');
+   $(this).addClass("selecionado");
    $.post('ajax_nodo.php',{
      codigo:$(this).attr('id'),
      beforeSend: function () {

@@ -1,6 +1,30 @@
-
+<?php
+include '../conexion/conexion.php';
+$sel_compania= $con->prepare("SELECT id, descripcion,pais  FROM compania WHERE id = ? ");
+$sel_compania -> bind_param('i', $_SESSION['compania']);
+$sel_compania -> execute();
+$sel_compania -> bind_result($id, $compania,$pais);
+$sel_compania->fetch();
+ ?>
   <nav class="darken-blue">
+    <?php echo'&nbsp;&nbsp;&nbsp;'.$pais ?>
     <a href="#" data-activates="menu" class="button-collapse"><i class="material-icons">menu</i></a>
+    <ul class="right hide-on-med-and-down">
+      <select  name="compania" id="compania" required>
+         <option value="<?php echo $id?>" disabled selected><?php echo $compania ?></option>
+         <?php
+         $sel_compania->close();
+         $sel= $con->prepare("SELECT c.id cid, descripcion FROM usuario_compania uc inner join compania c on uc.id_compania=c.id
+         WHERE uc.id_usuario= ? ");
+         $sel -> bind_param('i', $_SESSION['id_usuario']);
+         $sel -> execute();
+         $sel -> bind_result($cid, $compania);
+         ?>
+         <?php while ($sel->fetch()) { ?>
+         <option value="<?php echo $cid?>" ><?php echo  $compania?></option>
+         <?php } ?>
+      </select>
+    </ul>
   </nav>
   <ul id="menu" class="side-nav fixed blue lighten-5">
     <li>
@@ -17,7 +41,8 @@
     <li><div class="divider"></div></li>
     <!-- <li><a href="../ejecutivos"><i class="material-icons">contact_phone</i>Ejecutivos</li></a>
     <li><div class="divider"></div></li> -->
-    <li><a href="../redorganizacional"><i class="material-icons">location_city</i>Red Organizacional</li></a>
+    <li><a class="dropdown-button" href="#!" data-activates="ddclasificacion"><i class="material-icons">device_hub</i>Organización
+      <i class="material-icons right">arrow_drop_down</i></a></li>
     <li><div class="divider"></div></li>
     <li><a href="#"><i class="material-icons">dehaze</i>Parametros</li></a>
     <li><div class="divider"></div></li>
@@ -27,19 +52,17 @@
     <li><div class="divider"></div></li> -->
     <li><a href="../contactos"><i class="material-icons">perm_contact_calendar</i>Contactos</li></a>
     <li><div class="divider"></div></li>
-
-    <!-- <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><i class="material-icons">work</i>PROPIEDADES
-      <i class="material-icons right">arrow_drop_down</i></a></li>
-    <li><div class="divider"></div></li> -->
     <li><a href="../login/salir.php"><i class="material-icons">power_setting_new</i>SALIR</li></a>
     <li><div class="divider"></div></li>
   </ul>
 
-  <ul id="dropdown1" class="dropdown-content">
-    <li><a href="../propiedades/index.php">GENERAL</a></li>
-    <li><a href="../propiedades/index.php?ope=VENTA">VENTA</a></li>
-    <li><a href="../propiedades/index.php?ope=RENTA">RENTA</a></li>
-    <li><a href="../propiedades/index.php?ope=TRASPASO">TRASPASO</a></li>
-    <li><a href="../propiedades/index.php?ope=OCUPADO">OCUPADO</a></li>
-    <li><a href="../propiedades/cancelados.php">CANCELADOS</a></li>
+  <ul id="ddclasificacion" class="dropdown-content">
+    <li><a href="../redorganizacional/index.php?o=1">Red</a></li>
+    <li><a href="../redorganizacional/index.php?o=2">Nivel Complejidad</a></li>
+    <li><a href="../redorganizacional/index.php?o=3">Categoria y tipo Recurso Humano</a></li>
+    <li><a href="../redorganizacional/index.php?o=4">Categoria y tipo de Insumo</a></li>
+    <li><a href="../redorganizacional/index.php?o=5">Grupo unidad de gestión</a></li>
+    <li><a href="../redorganizacional/index.php?o=6">Unidad de gestión</a></li>
+
+
    </ul>

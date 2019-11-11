@@ -8,7 +8,7 @@ foreach ($_POST as $campo => $valor) {
 $header= "MIME-VERSION 1.0 \r\n";
 $header.="Content-Type: text/html; charset=iso-8859-1 \r\n";
 $header.= "From: {$nombre} < {$correo}> \r\n";
-$mail = mail("correo@empresa.com", $asunto, $mensaje, $header);
+$mail = mail("sediss@sailtest1.net", $asunto, $mensaje, $header);
 if ($mail) {
   echo "<h4 style='color:green;'>El mensaje ha sido enviado </h4>";
 }else{

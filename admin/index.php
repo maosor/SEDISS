@@ -23,7 +23,6 @@ if (isset($_SESSION['email'])){
       <div class = "input-field col s12 center">
         <img src="img/logo_sediss.png" width="200" >
       </div>
-
     </div>
     <div class="container">
       <div class="row">
@@ -34,7 +33,7 @@ if (isset($_SESSION['email'])){
               <form action="login/index.php" method="post" autocomplete="off">
                 <div class = "input-field">
                   <i class="material-icons prefix">perm_identity</i>
-                  <input type="email" name="usuario" id="usuario" required autofocus onblur="may (this.value, this.id)" >
+                  <input type="text" name="usuario" id="usuario" required autofocus onblur="may (this.value, this.id)" >
                   <label for="usuario">Usuario</label>
                 </div>
                 <div class = "input-field">

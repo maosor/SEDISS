@@ -21,6 +21,7 @@
   border-left:1px solid
 }
 .tree li {
+  cursor: pointer;
   margin:0;
   padding:0 1em;
   line-height:2em;
@@ -63,4 +64,10 @@
 }
 .node:not('.branch'){
   margin-right: 5px;
+}
+.selecionado{
+  background-color: #ffcdd2 ;
+}
+.encima{
+  background-color: #bbdefb ;
 }

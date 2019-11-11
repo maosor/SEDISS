@@ -8,10 +8,22 @@ if ($_SERVER['REQUEST_METHOD']== 'POST'){
   eval($variable);
   }
 $id='';
-$ins = $con->prepare("INSERT INTO red_organizacional VALUES (?,?,?,?,?,?) ");
-$ins -> bind_param('sssisi',$codigo, $descripcion,$id, $nivel, $orden, $codpadre);
+if($codpadre == '' or $codpadre == null )
+{
+  $codpadre = '000000000000000000000000000000000000000000000000000000000000';
+}
+if ($tipo > 4)
+{
+  $ins = $con->prepare("INSERT INTO tipo_unidades_gestion (Codigo, Descripcion, id, Nivel, Orden, CodPadre,Hereda,TieneCamas,Comprensiva,UnidProdPrim, UnidProdSec,UnidProdValorRel1,UnidProdValorRel2)
+  VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) ");
+  $ins -> bind_param('ssiiisiiissii',$codigo, $descripcion,$id, $nivel, $orden, $codpadre, $hereda, $camas, $comprensiva, $primaria, $secundaria, $prelativo, $srelativo);
+}
+else {
+    $ins = $con->prepare("INSERT INTO red_organizacional VALUES (?,?,?,?,?,?) ");
+    $ins -> bind_param('sssiss',$codigo, $descripcion,$id, $nivel, $orden, $codpadre);
+  }
 if ($ins -> execute()) {
-   mostrararbol('000000000000000000000000000000000000000000000000000000000000');
+   mostrararbol('000000000000000000000000000000000000000000000000000000000000',$tipo);
 }else {
   echo 'Error actualizando...';
 }
@@ -24,6 +36,8 @@ $con->close();
  <script src="../js/treeview.js" charset="utf-8"></script>
  <script type="text/javascript">
  $('.node').not(':has(ul)').click(function(){
+   $('.selecionado').removeClass('selecionado');
+   $(this).addClass("selecionado");
    $.post('ajax_nodo.php',{
      codigo:$(this).attr('id'),
      beforeSend: function () {
