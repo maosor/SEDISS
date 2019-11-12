@@ -87,7 +87,7 @@ function mostrararbol($CodPadre,$tipo)
   $sel -> bind_result($codigo, $descripcion, $nivel );
   $hijos = numerohijos($CodPadre);
 
-  if($hijos != 0){
+  if($hijos > 1){
     echo '<ul>';
   }
   while ($sel->fetch()) {
@@ -96,7 +96,7 @@ function mostrararbol($CodPadre,$tipo)
     mostrararbol($codigo,$tipo);
   }
   echo '</li>';
-  if($hijos != 0){
+  if($hijos > 1){
     echo '</ul>';
   }
 }

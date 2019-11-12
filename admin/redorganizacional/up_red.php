@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="../css/treeview.css">
+<!-- <link rel="stylesheet" href="../css/treeview.css"> -->
 <?php
 include '../conexion/conexion.php';
 include '../extend/funciones.php';
@@ -35,6 +35,7 @@ $con->close();
  $('.node').not(':has(ul)').click(function(){
    $.post('ajax_nodo.php',{
      codigo:$(this).attr('id'),
+     tipo:$('#tipo').val(),
      beforeSend: function () {
        $('.dvdetalle').html('Espere un momento por favor');
       }
