@@ -20,7 +20,7 @@ textarea.materialize-textarea:focus:not([readonly]) {
 .prefix{
   color: #0d47a1 !important;
 }
-.dropdown-content li > a, .dropdown-content li:not(.disabled) > span{
+.dropdown-content li > a, .dropdown-content li:not(.disabled) > span, .collection a.collection-item {
   color:#0d47a1 !important;
 }
 .tabs .tab a:hover, .tabs .tab a.active
@@ -34,8 +34,9 @@ textarea.materialize-textarea:focus:not([readonly]) {
 .btn, .picker__date-display,.picker__day--selected, .picker__day--selected:hover, .picker--focused .picker__day--selected, .tabs .indicator{
   background-color: #0d47a1 ;
 }
-.btn:hover{
+.btn:hover, .collection .collection-item.active{
   background-color: #1565c0 ;
+  color: #FFF !important;
 }
 .darken-blue{
   background-color: #012242;
@@ -65,7 +66,15 @@ textarea.materialize-textarea:focus:not([readonly]) {
   font-size: 1.1rem;
   line-height: 25px;
 }
+.btn-large i
+{
+  font-size: 40px;
+}
 #tbldatos > tbody > tr > td
 {
   padding: 5px 5px;
+}
+.collection{
+  height: 200px;
+  overflow-y: scroll;
 }

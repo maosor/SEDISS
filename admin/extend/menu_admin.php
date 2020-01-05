@@ -63,6 +63,7 @@ $sel_compania->fetch();
     <li><a href="../redorganizacional/index.php?o=4">Categoria y tipo de Insumo</a></li>
     <li><a href="../redorganizacional/index.php?o=5">Grupo unidad de gestión</a></li>
     <li><a href="../redorganizacional/index.php?o=6">Unidad de gestión</a></li>
+    <li><a href="../redorganizacional/index.php">Organización</a></li>
 
 
    </ul>

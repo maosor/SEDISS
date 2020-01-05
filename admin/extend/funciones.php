@@ -56,12 +56,24 @@ function ejecutivo($id)
   }
 }
 /*2019-08-29 *Mau Devuelve la cantidad de hijoe que tiene un deteminado grupo*/
-function numerohijos($cod)
+function numerohijos($cod,$tipo)
 {
   $rows = 0;
   include '../conexion/conexion.php';
-  $sel = $con->prepare("SELECT codigo FROM red_organizacional where codPadre = ? ");
+  if ($tipo == 5)
+  {
+    $sel = $con->prepare("SELECT codigo FROM tipo_unidades_gestion where idpa = ? AND EsUnidGestion = ? ");
+    $es=$tipo-5;
+    $sel -> bind_param('si',$cod,$es);
+  }elseif ($tipo == 6)
+  {
+    $sel = $con->prepare("SELECT codigo FROM tipo_unidades_gestion where idpa = ? ");
+    $sel -> bind_param('s',$cod);
+
+  }else{
+  $sel = $con->prepare("SELECT codigo FROM red_organizacional where idpa = ? ");
   $sel->bind_param("s", $cod);
+ }
   $sel-> execute();
   $sel->store_result();
   $rows = $sel->num_rows;
@@ -73,21 +85,24 @@ function mostrararbol($CodPadre,$tipo)
 {
   $clase='';
   include '../conexion/conexion.php';
-  if ($tipo > 4)
+  if ($tipo == 5)
   {
-    $sel = $con->prepare("SELECT codigo, descripcion, 2 FROM tipo_unidades_gestion where codPadre = ? AND EsUnidGestion = ? ");
+    $sel = $con->prepare("SELECT id, descripcion, nivel FROM tipo_unidades_gestion where idpa = ? AND EsUnidGestion = ? ");
     $es=$tipo-5;
     $sel -> bind_param('si',$CodPadre,$es);
-  }else {
-  $sel = $con->prepare("SELECT codigo, descripcion, nivel FROM red_organizacional where codPadre = ? and tipo = ? ORDER BY codigo");
+  }elseif ($tipo == 6)
+  {
+    $sel = $con->prepare("SELECT id, descripcion, nivel FROM tipo_unidades_gestion where idpa = ? ORDER BY codigo");
+    $sel -> bind_param('s',$CodPadre);
+  }else{
+  $sel = $con->prepare("SELECT id, descripcion, nivel FROM red_organizacional where idpa = ? and tipo = ? ORDER BY descripcion");
   $sel->bind_param("si", $CodPadre,$tipo);
   }
   $sel -> execute();
   $sel-> store_result();
   $sel -> bind_result($codigo, $descripcion, $nivel );
-  $hijos = numerohijos($CodPadre);
-
-  if($hijos > 1){
+  $hijos = numerohijos($CodPadre,$tipo);
+  if($hijos > 0){
     echo '<ul>';
   }
   while ($sel->fetch()) {
@@ -96,7 +111,7 @@ function mostrararbol($CodPadre,$tipo)
     mostrararbol($codigo,$tipo);
   }
   echo '</li>';
-  if($hijos > 1){
+  if($hijos > 0){
     echo '</ul>';
   }
 }
@@ -105,11 +120,10 @@ function padre($id,$tipo)
   include '../conexion/conexion.php';
   if ($tipo > 4)
   {
-    $sel = $con->prepare("SELECT descripcion FROM tipo_unidades_gestion where codigo = ? AND EsUnidGestion = ? ");
-    $es=$tipo-5;
-    $sel -> bind_param('si',$id,$es);
+    $sel = $con->prepare("SELECT descripcion FROM tipo_unidades_gestion where id = ? ");
+    $sel -> bind_param('i',$id);
   }else {
-  $sel = $con->prepare("SELECT descripcion FROM red_organizacional WHERE codigo = ? and tipo = ? ");
+  $sel = $con->prepare("SELECT descripcion FROM red_organizacional WHERE id = ? and tipo = ? order by descripcion");
   $sel->bind_param('si', $id,$tipo);
   }
   $sel->execute();
@@ -138,7 +152,7 @@ function nivel($id)
 function mayor($id,$tipo)
 {
   include '../conexion/conexion.php';
-  $sel = $con->prepare("SELECT max(codigo) FROM red_organizacional WHERE codpadre = ? and tipo = ? ");
+  $sel = $con->prepare("SELECT max(id) FROM red_organizacional WHERE idpa = ? and tipo = ? ");
   $sel->bind_param('si', $id,$tipo);
   $sel->execute();
   $sel->bind_result($mayor);
@@ -158,6 +172,10 @@ function descripcion($tipo)
    return 'Categoria y tipo Recurso Humano';
  }elseif ($tipo == 4) {
   return 'Categoria y tipo Insumo';
+}elseif ($tipo == 5) {
+ return 'Grupo Unidad de gestión';
+}elseif ($tipo == 6) {
+ return 'Unidad de gestión';
 }else {
   return '';
 }

@@ -5,58 +5,70 @@
     font-weight: normal;
   }
 </style>
+
 <?php
 include '../conexion/conexion.php';
 include '../extend/funciones.php';
-$codigo = htmlentities($_POST['codigo']);
+$id = htmlentities($_POST['id']);
 $tipo = htmlentities($_POST['tipo']);
-
 if ($tipo > 4)
 {
-  $sel = $con->prepare("SELECT id, codigo, descripcion, codpadre, nivel,orden, Hereda, TieneCamas, Comprensiva, UnidProdPrim, UnidProdSec, UnidProdValorRel1, UnidProdValorRel2  FROM tipo_unidades_gestion where codigo = ? ");
-  $sel -> bind_param('s',$codigo);
+  $sel = $con->prepare("SELECT id, codigo, descripcion, idpa, nivel,orden, Hereda, TieneCamas, Comprensiva,
+    UnidProdPrim, UnidProdSec, UnidProdValorRel1, UnidProdValorRel2,RecursoNuclear,Funcion,PerteneceA  FROM tipo_unidades_gestion where id = ? ");
+  $sel -> bind_param('s',$id);
   $sel -> execute();
-  $sel -> bind_result($id, $codigo, $descripcion,$codpadre,$nivel,$orden, $hereda, $camas, $comprensiva, $primaria, $secundaria, $prelativo, $srelativo );
+  $sel -> bind_result($id, $codigo, $descripcion,$idpa,$nivel,$orden, $hereda, $camas, $comprensiva,
+  $primaria, $secundaria, $prelativo, $srelativo,$RecursoNuclear,$Funcion,$PerteneceA );
 }else {
-  $sel = $con->prepare("SELECT id, codigo, descripcion, codpadre, nivel,orden FROM red_organizacional where codigo = ? and tipo = ? ");
-  $sel -> bind_param('si',$codigo,$tipo);
+  $sel = $con->prepare("SELECT id, codigo, descripcion, idpa, nivel,orden FROM red_organizacional where id = ? and tipo = ? ");
+  $sel -> bind_param('si',$id,$tipo);
   $sel -> execute();
-  $sel -> bind_result($id, $codigo, $descripcion,$codpadre,$nivel,$orden );
-  $hereda=0; $camas=0; $comprensiva=0; $primaria=''; $secundaria=''; $prelativo=0; $srelativo=0;
+  $sel -> bind_result($id, $codigo, $descripcion,$idpa,$nivel,$orden );
+  $hereda=0; $camas=0; $comprensiva=0; $primaria=''; $secundaria=''; $prelativo=0; $srelativo=0;$RecursoNuclear=0;$Funcion=0;$PerteneceA=0;
 }
-
 if ($sel->fetch()) {
    $sel->close();
+   $hidden = true;
+ }
+   else {
+     $hidden = false;
+     $nivel=0;$orden=0;
+     $padcodigo=''; $paddescripcion='';$padnivel=0;
+     $hereda=0; $camas=0; $comprensiva=0; $primaria=''; $secundaria=''; $prelativo=0; $srelativo=0;
+   }
    if ($tipo > 4)
    {
-     $esunidgestion = $tipo-5;
-     $sel_lst = $con->prepare("SELECT codigo, descripcion, nivel FROM tipo_unidades_gestion where EsUnidGestion = ? ");
-     $sel_lst -> bind_param('i',$esunidgestion);
+     $sel_lst = $con->prepare("SELECT id, descripcion, nivel FROM tipo_unidades_gestion where EsUnidGestion = 0 ");
    }else {
-     $sel_lst = $con->prepare("SELECT codigo, descripcion, nivel FROM red_organizacional where tipo = ? ");
+     $sel_lst = $con->prepare("SELECT id, descripcion, nivel FROM red_organizacional where tipo = ? ");
      $sel_lst -> bind_param('i',$tipo);
   }
    $sel_lst -> execute();
-   $sel_lst -> bind_result($padcodigo, $paddescripcion,$padnivel );
-   echo $padcodigo.$paddescripcion.$padnivel;
+   $sel_lst -> bind_result($padid, $paddescripcion,$padnivel );
+   //echo $padcodigo.$paddescripcion.$padnivel;
    ?>
+
     <div class="row">
-      <a id ='ins' class="btn-floating green left"><i
-        class="material-icons">add</i></a>
-      <a id ='up' class="btn-floating blue left" style= "margin-left: 5px;"><i
+      <a id ='del' class="btn-floating btn-large red right <?php echo $hidden==true?'':'hidden'?>" style= "margin-left: 5px;"><i
+        class="material-icons">delete</i></a>
+      <a id ='ins' class="btn-floating btn-large green right <?php echo $hidden==true?'hidden':''?>"> <i
+        class="material-icons">check</i></a>
+      <a id ='up' class="btn-floating btn-large blue right <?php echo $hidden==true?'':'hidden'?>" style= "margin-left: 5px;"><i
         class="material-icons">save</i></a>
+
       <br>
         <br>
+      <div></div>
       <input type="hidden" id = "id" name="id" value="<?php echo $id?>">
       </div>
     <div class="row">
       <div class="form-group">
-      <label for="codpadre">Padre</label>
-      <select  class="form-control" id="codpadre" name="codpadre" required value = "1">
-        <option value="<?php echo $codpadre?>" selected disabled><?php echo padre($codpadre,$tipo)?></option>
+      <label for="idpa">Padre</label>
+      <select  class="form-control" id="idpa" name="idpa" required value = "1">
+        <option value="<?php echo $idpa?>" selected disabled><?php echo padre($idpa,$tipo)?></option>
         <option value="" ></option>
           <?php while ($sel_lst ->fetch()): ?>
-            <option mayor = '<?php echo mayor($padcodigo,$tipo)?>' nivel='<?php echo $padnivel?>' value="<?php echo $padcodigo?>"><?php echo $paddescripcion?></option>
+            <option nivel='<?php echo $padnivel?>' value="<?php echo $padid?>"><?php echo $paddescripcion?></option>
           <?php endwhile;
           $sel_lst ->close();?>
       </select>
@@ -64,7 +76,7 @@ if ($sel->fetch()) {
     </div>
     <div class="row">
      <div class = "input-field col s12" style="display:none;">
-       <input type="text" id = "codigo" name="codigo" disabled value="<?php echo $codigo?>">
+       <input type="text" id = "codigo" name="codigo" disabled value="<?php echo $id?>">
        <label class="active" for="codigo">Código</label>
      </div>
    </div>
@@ -118,7 +130,7 @@ if ($sel->fetch()) {
   </div>
   <div class="row">
     <div class = "input-field col s8">
-      <input type="text" name="primaria" title="secundaria" id="secundaria" focus=true value="<?php echo $secundaria ?>" >
+      <input type="text" name="secundaria" title="secundaria" id="secundaria" focus=true value="<?php echo $secundaria ?>" >
       <label class="active" for="secundaria">Secundaria</label>
     </div>
     <div class = "input-field col s4">
@@ -130,29 +142,28 @@ if ($sel->fetch()) {
 <div class="unidad <?php echo $tipo!=6?'hidden':'' ?>">
   <div class="row">
     <div class = "input-field col s4">
-      <input type="text" name="RecursoNuclearv " title="RecursoNuclearv " id="RecursoNuclearv " focus=true value="<?php /*echo RecursoNuclearv*/  ?>" >
-      <label class="active" for="RecursoNuclearv ">Recurso Nuclear</label>
+      <input type="text" name="RecursoNuclear" title="RecursoNuclear" id="RecursoNuclear" focus=true value="<?php echo $RecursoNuclear  ?>" >
+      <label class="active" for="RecursoNuclear">Recurso Nuclear</label>
     </div>
     <div class="col s3">
     <label for="funcion">Función</label>
     <select id="funcion"class="form-control">
-      <option value="" disabled selected></option>
+      <option value="<?php echo $Funcion?>" disabled selected><?php echo $Funcion==1?'Final':$Funcion==2?'Apoyo':''?></option>
       <option value="1">Final</option>
       <option value="2">Apoyo</option>
     </select>
 
-</div>
+ </div>
     <div class = "col s5">
       <?php
-       $sel_per= $con->prepare("SELECT codigo, descripcion FROM red_organizacional where tipo = ? AND codigo not in (SELECT DISTINCT codpadre FROM red_organizacional where tipo = 3)");
-       $sel_per-> bind_param('i',$tipo);
+       $sel_per= $con->prepare("SELECT id, descripcion FROM red_organizacional where tipo = 3 AND id not in (SELECT DISTINCT codpadre FROM red_organizacional where tipo = 3)");
        $sel_per-> execute();
-       $sel_per-> bind_result($percodigo, $perdescripcion ); ?>
+       $sel_per-> bind_result($perid, $perdescripcion ); ?>
       <label for="pertenece">Pertenece a</label>
          <select id="pertenece"class="form-control">
-           <option value="<?php echo $codpadre?>" selected disabled><?php echo padre($codpadre,$tipo)?></option>
+           <option value="<?php echo $PerteneceA?>" selected disabled><?php echo padre($PerteneceA,3)?></option>
              <?php while ($sel_per ->fetch()): ?>
-               <option value="<?php echo $percodigo?>"><?php echo $perdescripcion?></option>
+               <option value="<?php echo $perid?>"><?php echo $perdescripcion?></option>
              <?php endwhile;
              $sel_per ->close();?>
          </select>
@@ -160,7 +171,7 @@ if ($sel->fetch()) {
   </div>
 </div>
 <?php
-}
+
 
 /*$sel -> close();*/
  ?>
@@ -169,15 +180,18 @@ if ($sel->fetch()) {
    $.post('up_red.php',{
      id:$('#id').val(),
      codigo:$('#codigo').val(),
-     codpadre:$('#codpadre').val(),
+     idpa:$('#idpa option:selected').val(),
      descripcion:$('#descripcion').val(),
      nivel:$('#nivel').val(),
      orden:$('#orden').val(),
      primaria:$('#primaria').val(),
-     prelativa:$('#prelativa').val(),
+     prelativo:$('#prelativo').val(),
      secundaria:$('#secundaria').val(),
-     srelativa:$('#srelativa').val(),
+     srelativo:$('#srelativo').val(),
      tipo:$('#tipo').val(),
+     RecursoNuclear:$('#RecursoNuclear').val(),
+     funcion:$('#funcion option:selected').val(),
+     pertenece:$('#pertenece option:selected').val(),
      beforeSend: function () {
        $('#tree1 > ul').html('Espere un momento por favor');
       }
@@ -188,14 +202,28 @@ if ($sel->fetch()) {
  $('#ins').click(function(){
    $.post('ins_red.php',{
      codigo:$('#codigo').val(),
-     codpadre:$('#codpadre').val(),
+     idpa:$('#idpa option:selected').val(),
      descripcion:$('#descripcion').val(),
      nivel:$('#nivel').val(),
      orden:$('#orden').val(),
      primaria:$('#primaria').val(),
-     prelativa:$('#prelativa').val(),
+     prelativo:$('#prelativo').val(),
      secundaria:$('#secundaria').val(),
-     srelativa:$('#srelativa').val(),
+     srelativo:$('#srelativo').val(),
+     tipo:$('#tipo').val(),
+     RecursoNuclear:$('#RecursoNuclear').val(),
+     funcion:$('#funcion option:selected').val(),
+     pertenece:$('#pertenece option:selected').val(),
+     beforeSend: function () {
+       $('#tree1 > ul').html('Espere un momento por favor');
+      }
+    }, function (respuesta) {
+         $('#tree1 > ul').html(respuesta);
+   });
+ });
+ $('#del').click(function(){
+   $.post('del_red.php',{
+     id:$('#id').val(),
      tipo:$('#tipo').val(),
      beforeSend: function () {
        $('#tree1 > ul').html('Espere un momento por favor');

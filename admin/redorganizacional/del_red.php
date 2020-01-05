@@ -7,36 +7,27 @@ if ($_SERVER['REQUEST_METHOD']== 'POST'){
   $variable = "$".$campo."='".htmlentities($valor)."';";
   eval($variable);
   }
-$id='';
-if($idpa == '' or $idpa == null )
-{
-  $idpa = '0';
-}
-if(isset($_POST['tipo'])){
-  if ($tipo > 4)
-  {
-    $ins = $con->prepare("INSERT INTO tipo_unidades_gestion (Descripcion, Nivel, Orden,
-       idpa,Hereda,TieneCamas,Comprensiva,UnidProdPrim, UnidProdSec,UnidProdValorRel1,UnidProdValorRel2,RecursoNuclear,Funcion,PerteneceA)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
-    $ins -> bind_param('siiiiiissiisii', $descripcion, $nivel, $orden,
-    $idpa, $hereda, $camas, $comprensiva, $primaria, $secundaria, $prelativo, $srelativo,$RecursoNuclear,$funcion,$pertenece);
-  }
-  else {
-      $ins = $con->prepare("INSERT INTO red_organizacional (Descripcion, Nivel, Orden, idpa, tipo) VALUES (?,?,?,?,?) ");
-      $ins -> bind_param('siiii', $descripcion, $nivel, $orden, $idpa,$tipo);
+  if(isset($_POST['tipo'])){
+    if ($tipo > 4)
+    {
+      $up = $con->prepare("DELETE FROM tipo_unidades_gestion WHERE id=? ");
+      $up->bind_param('i',  $id);
+    }else {
+      $up = $con->prepare("DELETE FROM red_organizacional WHERE id=? ");
+      $up->bind_param('i', $id);
     }
-}else {
-  $ins = $con->prepare("INSERT INTO organizacion (Descripcion, complejidad, poblacion, idpa) VALUES (?,?,?,?) ");
-  $ins -> bind_param('siii', $descripcion, $complejidad, $poblacion, $idpa);
-  $tipo=1;
-}
+  }else {
+    $up = $con->prepare("DELETE FROM organizacion WHERE id=? ");
+    $up->bind_param('i', $id);
+    $tipo=1;
+  }
 
-if ($ins -> execute()) {
-   mostrararbol('0',$tipo);
-}else {
-  echo 'Error Insertando...';
-}
-$ins ->close();
+    if ($up -> execute()) {
+     mostrararbol('000000000000000000000000000000000000000000000000000000000000',$tipo);
+  }else {
+    echo 'Error actualizando...';
+  }
+$up->close();
 $con->close();
 }else {
   header('location:../extend/alerta.php?msj=Utiliza el formulario&c=suc&p=in&t=error');
@@ -77,4 +68,4 @@ $con->close();
          $('.dvdetalle').html(respuesta)
    });
  }
-  </script>
+ </script>
