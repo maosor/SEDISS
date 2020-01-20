@@ -78,3 +78,12 @@ textarea.materialize-textarea:focus:not([readonly]) {
   height: 200px;
   overflow-y: scroll;
 }
+.dvinsumo, .dvunidad{
+  border:1px solid #eee;
+}
+.dvinsumo * {
+  height: 30px;
+}
+.dvinsumo{
+  line-height: 50px;
+}

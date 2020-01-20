@@ -22,12 +22,12 @@
         document.getElementById(id).value = obj;
       }
       $('.datepicker').pickadate({
-        format:'yyyy-m-d',
+        format:'yyyy-mm-dd',
         selectMonths: true, // Creates a dropdown to control month
         selectYears: 15, // Creates a dropdown of 15 years to control year,
-        today: 'Today',
-        clear: 'Clear',
+        today: 'Hoy',
+        clear: 'Limpiar',
         close: 'Ok',
-        closeOnSelect: false // Close upon selecting a date,
-      });
+        closeOnSelect: false,
+            });
       </script>

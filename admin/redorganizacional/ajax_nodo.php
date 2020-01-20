@@ -14,13 +14,13 @@ $tipo = htmlentities($_POST['tipo']);
 if ($tipo > 4)
 {
   $sel = $con->prepare("SELECT id, codigo, descripcion, idpa, nivel,orden, Hereda, TieneCamas, Comprensiva,
-    UnidProdPrim, UnidProdSec, UnidProdValorRel1, UnidProdValorRel2,RecursoNuclear,Funcion,PerteneceA  FROM tipo_unidades_gestion where id = ? ");
+    UnidProdPrim, UnidProdSec, UnidProdValorRel1, UnidProdValorRel2,RecursoNuclear,Funcion,PerteneceA  FROM tipo_unidades_gestion where id = ? ORDER BY descripcion");
   $sel -> bind_param('s',$id);
   $sel -> execute();
   $sel -> bind_result($id, $codigo, $descripcion,$idpa,$nivel,$orden, $hereda, $camas, $comprensiva,
   $primaria, $secundaria, $prelativo, $srelativo,$RecursoNuclear,$Funcion,$PerteneceA );
 }else {
-  $sel = $con->prepare("SELECT id, codigo, descripcion, idpa, nivel,orden FROM red_organizacional where id = ? and tipo = ? ");
+  $sel = $con->prepare("SELECT id, codigo, descripcion, idpa, nivel,orden FROM red_organizacional where id = ? and tipo = ? ORDER BY descripcion");
   $sel -> bind_param('si',$id,$tipo);
   $sel -> execute();
   $sel -> bind_result($id, $codigo, $descripcion,$idpa,$nivel,$orden );
@@ -38,9 +38,9 @@ if ($sel->fetch()) {
    }
    if ($tipo > 4)
    {
-     $sel_lst = $con->prepare("SELECT id, descripcion, nivel FROM tipo_unidades_gestion where EsUnidGestion = 0 ");
+     $sel_lst = $con->prepare("SELECT id, descripcion, nivel FROM tipo_unidades_gestion where EsUnidGestion = 0 ORDER BY descripcion");
    }else {
-     $sel_lst = $con->prepare("SELECT id, descripcion, nivel FROM red_organizacional where tipo = ? ");
+     $sel_lst = $con->prepare("SELECT id, descripcion, nivel FROM red_organizacional where tipo = ? ORDER BY descripcion");
      $sel_lst -> bind_param('i',$tipo);
   }
    $sel_lst -> execute();
@@ -156,7 +156,7 @@ if ($sel->fetch()) {
  </div>
     <div class = "col s5">
       <?php
-       $sel_per= $con->prepare("SELECT id, descripcion FROM red_organizacional where tipo = 3 AND id not in (SELECT DISTINCT codpadre FROM red_organizacional where tipo = 3)");
+       $sel_per= $con->prepare("SELECT id, descripcion FROM red_organizacional where tipo = 3 AND id not in (SELECT DISTINCT codpadre FROM red_organizacional where tipo = 3) ORDER BY descripcion");
        $sel_per-> execute();
        $sel_per-> bind_result($perid, $perdescripcion ); ?>
       <label for="pertenece">Pertenece a</label>

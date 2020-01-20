@@ -47,6 +47,9 @@
       case 'prop':
         $carpeta = '../propiedades/';
         break;
+      case 'gd':
+        $carpeta = '../gestionglobal/';
+        break;
       }
     switch ($p) {
       case 'in':

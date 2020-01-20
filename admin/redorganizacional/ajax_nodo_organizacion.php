@@ -10,7 +10,7 @@
 include '../conexion/conexion.php';
 include '../extend/funciones.php';
 $idpa = htmlentities($_POST['id']);
-  $sel = $con->prepare("SELECT id, descripcion, complejidad, poblacion FROM organizacion where idpa = ? ");
+  $sel = $con->prepare("SELECT id, descripcion, complejidad, poblacion FROM organizacion where idpa = ? ORDER BY descripcion ");
   $sel -> bind_param('i', $idpa);
   $sel -> execute();
   $sel -> bind_result($id, $descripcion,$complejidad,$poblacion );
@@ -41,7 +41,7 @@ if ($sel->fetch()) {
    </div>
    <div class = "row">
      <?php
-      $sel_niv= $con->prepare("SELECT id, descripcion FROM red_organizacional where tipo = 2 AND id not in (SELECT DISTINCT codpadre FROM red_organizacional where tipo = 2)");
+      $sel_niv= $con->prepare("SELECT id, descripcion FROM red_organizacional where tipo = 2 AND id not in (SELECT DISTINCT codpadre FROM red_organizacional where tipo = 2) ORDER BY descripcion");
       $sel_niv-> execute();
       $sel_niv-> bind_result($nivid, $nivdescripcion ); ?>
      <label for="complejidad">Nivel de complejidad</label>
@@ -63,7 +63,7 @@ if ($sel->fetch()) {
      <input type="hidden" name="unidad" id="unidad">
      <?php
       $sel_uni= $con->prepare("SELECT id, descripcion FROM tipo_unidades_gestion where id not in (SELECT DISTINCT idpa FROM tipo_unidades_gestion) AND id NOT IN
-      (SELECT unidadgestion FROM unidadgestion_organizacion)");
+      (SELECT unidadgestion FROM unidadgestion_organizacion) ORDER BY descripcion");
       $sel_uni-> execute();
       $sel_uni-> bind_result($uniid, $unidescripcion ); ?>
      <label for="unidadgestion">Unidades de Gestión</label>
@@ -79,7 +79,7 @@ if ($sel->fetch()) {
    </div>
    <div class = "row">
      <?php
-      $sel_uni_org= $con->prepare("SELECT ug.id, ug.descripcion FROM unidadgestion_organizacion uo INNER JOIN tipo_unidades_gestion ug ON uo.unidadgestion = ug.id WHERE uo.organizacion = ? ");
+      $sel_uni_org= $con->prepare("SELECT ug.id, ug.descripcion FROM unidadgestion_organizacion uo INNER JOIN tipo_unidades_gestion ug ON uo.unidadgestion = ug.id WHERE uo.organizacion = ? ORDER BY ug.descripcion");
       $sel_uni_org -> bind_param('i',$id);
       $sel_uni_org-> execute();
       $sel_uni_org-> bind_result($uniorgid, $uniorgdescripcion ); ?>

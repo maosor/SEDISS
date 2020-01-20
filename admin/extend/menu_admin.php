@@ -44,14 +44,16 @@ $sel_compania->fetch();
     <li><a class="dropdown-button" href="#!" data-activates="ddclasificacion"><i class="material-icons">device_hub</i>Organización
       <i class="material-icons right">arrow_drop_down</i></a></li>
     <li><div class="divider"></div></li>
-    <li><a href="#"><i class="material-icons">dehaze</i>Parametros</li></a>
+    <!-- <li><a href="#"><i class="material-icons">dehaze</i>Parametros</li></a>
+    <li><div class="divider"></div></li> -->
+    <li><a href="../gestionglobal"><i class="material-icons">grid_on</i>Gestión de Datos</li></a>
     <li><div class="divider"></div></li>
     <!--<li><a href=".#"><i class="material-icons">contacts</i>Unidades de Gestion</li></a>
     <li><div class="divider"></div></li>
     <li><a href="../clientes"><i class="material-icons">people</i>Clientes</li></a>
     <li><div class="divider"></div></li> -->
-    <li><a href="../contactos"><i class="material-icons">perm_contact_calendar</i>Contactos</li></a>
-    <li><div class="divider"></div></li>
+    <!-- <li><a href="../contactos"><i class="material-icons">perm_contact_calendar</i>Contactos</li></a>
+    <li><div class="divider"></div></li> -->
     <li><a href="../login/salir.php"><i class="material-icons">power_setting_new</i>SALIR</li></a>
     <li><div class="divider"></div></li>
   </ul>
