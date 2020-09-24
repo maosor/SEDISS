@@ -1,28 +1,73 @@
 $('#up').click(function() {
   // $.each([ 52, 97 ], function( index, value ) {
-var insumo=[];
 var unidades=[];
-$('.dvunidad').each(function (iu, univalor) {
-  var unidad = {};
-  unidad['Id'] = $(univalor).attr('id');
-  //unidad['Descripcion'] = $(univalor).attr('Text');
-  var uniid = $(univalor).attr('id');
-  $('#'+ uniid +' .inprubro').each(function(ii,insvalor) {
-      item = {};
-      item['Id']=$(insvalor).attr('id');
-      item['Rubro'] = $(insvalor).val();
-      insumo.push(item);
-      // insumo.Insumos.push({
-      //   Id: $(value).attr('id'),
-      //   Rubro:$(value).val()
-      // })
-      //console.log( index + ": " + $('#984 div .input-field input').val());
-    });
-    unidad['insumo'] =insumo;
-    insumo=[];
-    unidades.push(unidad);
+var ref = $(".tabs .active").attr('href');
+if(ref=== "#insumos"){
+  var insumo=[];
+  $('#insumos div .dvunidad').each(function (iu, univalor) {
+    var unidad = {};
+    unidad['Id'] = $(univalor).attr('id');
+    //unidad['Descripcion'] = $(univalor).attr('Text');
+    var uniid = $(univalor).attr('id');
+    $('#'+ uniid +' .inprubro').each(function(ii,insvalor) {
+        item = {};
+        item['Id']=$(insvalor).attr('id');
+        item['Rubro'] = $(insvalor).val();
+        insumo.push(item);
+        // insumo.Insumos.push({
+        //   Id: $(value).attr('id'),
+        //   Rubro:$(value).val()
+        // })
+        //console.log( index + ": " + $('#984 div .input-field input').val());
+      });
+      unidad['insumo'] =insumo;
+      insumo=[];
+      unidades.push(unidad);
 
-});
+  });
+}
+if(ref=== "#produccion"){
+  var produccion=[];
+  $('#produccion div .dvunidad').each(function (iu, univalor) {
+    var unidad = {};
+    unidad['Id'] = $(univalor).attr('id');
+    //unidad['Descripcion'] = $(univalor).attr('Text');
+    var uniid = $(univalor).attr('id');
+    $('#'+ uniid +' .inprod').each(function(ii,insvalor) {
+        item = {};
+        item['Id']=$(insvalor).attr('id');
+        item['Rubro'] = $(insvalor).val();
+        produccion.push(item);
+      });
+      unidad['produccion'] =produccion;
+      produccion=[];
+      unidades.push(unidad);
+  });
+}
+else if (ref=== "#horas"){
+    var hora=[];
+  $('#horas div .dvunidad').each(function (iu, univalor) {
+    var unidad = {};
+    unidad['Id'] = $(univalor).attr('id');
+    //unidad['Descripcion'] = $(univalor).attr('Text');
+    var uniid = $(univalor).attr('id');
+    $('#'+ uniid +' .inphora').each(function(ii,insvalor) {
+        item = {};
+        item['Id']=$(insvalor).attr('id');
+        item['Rubro'] = $(insvalor).val();
+        hora.push(item);
+        // insumo.Insumos.push({
+        //   Id: $(value).attr('id'),
+        //   Rubro:$(value).val()
+        // })
+        //console.log( index + ": " + $('#984 div .input-field input').val());
+      });
+      unidad['hora'] =hora;
+      hora=[];
+      unidades.push(unidad);
+
+  });
+}
 unidades = JSON.stringify(unidades);
   $.ajax({
     type: "POST",
@@ -31,38 +76,48 @@ unidades = JSON.stringify(unidades);
       mydata:unidades,
       organizacion:$('#organizacion').val(),
       fecha:$('#periodo').val(),
+      accion:ref,
     },
     success:function (respuesta) {
         //console.log(respuesta);
-        $('#insumos').html(respuesta);
+        $(ref).html(respuesta);
     },
     error:function () {
       console.log('No respuesta...');
     }
-
-
   });
 });
 
 $('#sync').click(function () {
-  $.post('gridinsumo.php',{
+  var ref = $(".tabs .active").attr('href');
+  var accion,tab;
+  if (ref=== "#insumos"){
+    accion = 'gridinsumo.php';
+  }else if (ref=== "#produccion"){
+    accion = 'gridproduccion.php';
+  }else if (ref=== "#horas"){
+    accion = 'gridhora.php';
+  }
+  $.post(accion,{
     organizacion:$('#organizacion').val(),
     fecha:$('#periodo').val(),
     beforeSend: function () {
-      $('#insumos').html('Espere un momento por favor');
+      $(ref).html('Espere un momento por favor');
      }
    }, function (respuesta) {
-        $('#insumos').html(respuesta)
+        $(ref).html(respuesta)
   });
 });
 $('#del').click(function () {
+var ref = $(".tabs .active").attr('href');
   $.post('del_gestion_datos.php',{
     organizacion:$('#organizacion').val(),
     fecha:$('#periodo').val(),
+    accion:ref,
     beforeSend: function () {
-      $('#insumos').html('Espere un momento por favor');
+      $(ref).html('Espere un momento por favor');
      }
    }, function (respuesta) {
-        $('#insumos').html(respuesta)
+        $(ref).html(respuesta)
   });
 });

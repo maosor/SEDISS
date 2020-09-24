@@ -38,6 +38,7 @@ if (!isset($_SESSION['email'])){
    }
  }
  </style>
+ </script>
  </head>
  <body class="grey lighten-3">
 <main>

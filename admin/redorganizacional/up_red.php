@@ -11,31 +11,32 @@ if ($_SERVER['REQUEST_METHOD']== 'POST'){
   {
     $idpa = '0';
   }
-  if(isset($_POST['tipo'])){
-    if ($tipo > 4)
-    {
-      $up = $con->prepare("UPDATE tipo_unidades_gestion SET descripcion=?, idpa=?,nivel=?, orden=?,Hereda=?,TieneCamas=?,Comprensiva=?,UnidProdPrim=?, UnidProdSec=?,UnidProdValorRel1=?,UnidProdValorRel2=?,RecursoNuclear=?,Funcion=?,PerteneceA=?  WHERE id=? ");
-      $up->bind_param('siiiiiissiisiii', $descripcion, $idpa, $nivel, $orden, $hereda, $camas, $comprensiva, $primaria, $secundaria, $prelativo, $srelativo,$RecursoNuclear,$funcion,$pertenece,$id);
-    }else {
-      $up = $con->prepare("UPDATE red_organizacional SET descripcion=?, idpa=?,nivel=?, orden=?  WHERE id=? ");
-      $up->bind_param('ssiii', $descripcion, $idpa, $nivel, $orden, $id);
-    }
+  $tipo=$tipo==null?1:$tipo;
+    if(isset($_POST['tipo'])){
+        if ($tipo > 4)
+        {
+          $up = $con->prepare("UPDATE tipo_unidades_gestion SET descripcion=?, idpa=?,nivel=?, orden=?,Hereda=?,TieneCamas=?,Comprensiva=?,UnidProdPrim=?, UnidProdSec=?,UnidProdValorRel1=?,UnidProdValorRel2=?,RecursoNuclear=?,Funcion=?,PerteneceA=?  WHERE id=? ");
+          $up->bind_param('siiiiiissiisiii', $descripcion, $idpa, $nivel, $orden, $hereda, $camas, $comprensiva, $primaria, $secundaria, $prelativo, $srelativo,$RecursoNuclear,$funcion,$pertenece,$id);
+        }else {
+          $up = $con->prepare("UPDATE red_organizacional SET descripcion=?, idpa=?,nivel=?, orden=?  WHERE id=? ");
+          $up->bind_param('ssiii', $descripcion, $idpa, $nivel, $orden, $id);
+        }
+      }
+      else {
+        $up = $con->prepare("UPDATE organizacion SET descripcion=?, complejidad=?, poblacion=? WHERE id=? ");
+        $up->bind_param('siii', $descripcion, $complejidad, $poblacion, $id);
+        $tipo=1;
+      }
+        if ($up -> execute()) {
+          mostrararbol('000000000000000000000000000000000000000000000000000000000000',$tipo);
+        }else {
+          echo 'Error actualizando...';
+        }
+  $up->close();
+  $con->close();
   }else {
-    $up = $con->prepare("UPDATE organizacion SET descripcion=?, complejidad=?, poblacion=? WHERE id=? ");
-    $up->bind_param('siii', $descripcion, $complejidad, $poblacion, $id);
-    $tipo=1;
+    header('location:../extend/alerta.php?msj=Utiliza el formulario&c=red&p=in&t=error');
   }
-
-    if ($up -> execute()) {
-     mostrararbol('000000000000000000000000000000000000000000000000000000000000',$tipo);
-  }else {
-    echo 'Error actualizando...';
-  }
-$up->close();
-$con->close();
-}else {
-  header('location:../extend/alerta.php?msj=Utiliza el formulario&c=suc&p=in&t=error');
-}
  ?>
  <script src="../js/treeview.js" charset="utf-8"></script>
  <script type="text/javascript">

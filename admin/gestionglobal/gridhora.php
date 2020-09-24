@@ -14,27 +14,27 @@ if($_POST){
     <b>Insumo</b>
   </div>
   <div class="col s3">
-    <b>Rubro</b>
+    <b>Hora</b>
   </div>
 </div>
 <?php
-$sel_unid = $con->prepare("SELECT DISTINCT ug.id, ug.Descripcion FROM gastos g INNER JOIN tipo_unidades_gestion ug ON g.unidadgestion = ug.id WHERE g.idcompania = 1 AND g.organizacion = ? AND fecha = ? order by ug.id");
+$sel_unid = $con->prepare("SELECT DISTINCT ug.id, ug.Descripcion FROM horas h INNER JOIN tipo_unidades_gestion ug ON h.unidadgestion = ug.id WHERE h.idcompania = 1 AND h.organizacion = ? AND fecha = ? order by ug.id");
 $sel_unid -> bind_param('is', $organizacion, $fecha);
 $sel_unid -> execute();
 $sel_unid-> store_result();
 $sel_unid -> bind_result($idug, $unidadgestion);
-if($sel_unid->num_rows == 0){
+if($sel_unid->num_rows == 0){ 
   header('document:index.php');
 }
 while ($sel_unid ->fetch()): ?>
 <div class="row">
-  <div id="g-<?php echo $idug?>" class="col s12 dvunidad">
+  <div id="h-<?php echo $idug?>" class="col s12 dvunidad">
         <div class="col s4">
           <span><?php echo $unidadgestion ?></span>
         </div>
         <div class="input-field col s8">
           <?php
-          $sel_insu = $con->prepare("SELECT ro.id, ro.descripcion, g.rubro from gastos g inner join red_organizacional ro on g.insumo = ro.id and tipo = 4 WHERE g.idcompania = 1 AND g.organizacion = ? AND  g.unidadgestion = ? AND fecha = ? order by ro.id ");
+          $sel_insu = $con->prepare("SELECT ro.id, ro.descripcion, h.rubro from horas h inner join red_organizacional ro on h.recurso = ro.id and tipo = 3 WHERE h.idcompania = 1 AND h.organizacion = ? AND  h.unidadgestion = ? AND fecha = ? order by ro.orden,ro.orden,ro.id ");
           $sel_insu -> bind_param('iis', $organizacion,$idug, $fecha);
           $sel_insu -> execute();
           $sel_insu-> store_result();
@@ -46,7 +46,7 @@ while ($sel_unid ->fetch()): ?>
                     <span>  <?php echo $insumo ?></span>
                   </div>
                   <div class="col s4 ">
-                      <input class="inprubro" id="g-<?php echo $idin?>" type="text"  title="rubro" value="<?php echo $rubro?>" >
+                      <input class="inprubro" id="h-<?php echo $idin?>" type="text"  title="rubro" value="<?php echo $rubro?>" >
                   </div>
                 </div>
               </div>

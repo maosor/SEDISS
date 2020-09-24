@@ -1,0 +1,13 @@
+[21-Sep-2020 22:59:12 UTC] PHP Notice:  Undefined index: foto in /home/g4yg2ssqb8a5/public_html/sediss/admin/extend/menu_admin.php on line 40
+[21-Sep-2020 22:59:12 UTC] PHP Notice:  Undefined index: nombre in /home/g4yg2ssqb8a5/public_html/sediss/admin/extend/menu_admin.php on line 41
+[21-Sep-2020 22:59:12 UTC] PHP Notice:  Undefined index: apellido1 in /home/g4yg2ssqb8a5/public_html/sediss/admin/extend/menu_admin.php on line 41
+[21-Sep-2020 22:59:12 UTC] PHP Notice:  Undefined index: apellido2 in /home/g4yg2ssqb8a5/public_html/sediss/admin/extend/menu_admin.php on line 41
+[21-Sep-2020 22:59:12 UTC] PHP Notice:  Undefined index: email in /home/g4yg2ssqb8a5/public_html/sediss/admin/extend/menu_admin.php on line 42
+[21-Sep-2020 22:59:25 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::affected_rows() in /home/g4yg2ssqb8a5/public_html/sediss/admin/cuadro/dos.php:67
+Stack trace:
+#0 {main}
+  thrown in /home/g4yg2ssqb8a5/public_html/sediss/admin/cuadro/dos.php on line 67
+[21-Sep-2020 23:00:34 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method mysqli_stmt::affected_rows() in /home/g4yg2ssqb8a5/public_html/sediss/admin/cuadro/dos.php:67
+Stack trace:
+#0 {main}
+  thrown in /home/g4yg2ssqb8a5/public_html/sediss/admin/cuadro/dos.php on line 67

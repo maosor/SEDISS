@@ -1,4 +1,6 @@
   <?php include '../extend/header.php';
+  //phpinfo();
+//  print_r($_SESSION);
 //$sel = $con->prepare("SELECT propiedad FROM inventario WHERE operacion = ?");
 //$sel -> bind_param('s', $operacion);
   ?>

@@ -31,3 +31,14 @@
         closeOnSelect: false,
             });
       </script>
+      <script type="text/javascript">
+    //  $('#compania').material_select();
+      $('#compania').on('change', function(e) {
+        $.post("../extend/set.php", {"name": "compania","value":e.target.value},function(result){
+          console.log(result);
+          location.reload();
+        });
+
+      });
+
+      </script>

@@ -55,6 +55,20 @@ function ejecutivo($id)
     return '';
   }
 }
+function compania($id)
+{
+  include '../conexion/conexion.php';
+  $sel = $con->prepare("SELECT descripcion FROM compania WHERE id = ? ");
+  $sel->bind_param('i', $id);
+  $sel->execute();
+  $sel->bind_result($descripcion);
+  if($sel->fetch()){
+    return $descripcion;
+  }
+  else {
+    return '';
+  }
+}
 /*2019-08-29 *Mau Devuelve la cantidad de hijoe que tiene un deteminado grupo*/
 function numerohijos($cod,$tipo)
 {
@@ -87,15 +101,15 @@ function mostrararbol($CodPadre,$tipo)
   include '../conexion/conexion.php';
   if ($tipo == 5)
   {
-    $sel = $con->prepare("SELECT id, descripcion, nivel FROM tipo_unidades_gestion where idpa = ? AND EsUnidGestion = ? ");
+    $sel = $con->prepare("SELECT id, descripcion, nivel FROM tipo_unidades_gestion where idpa = ? AND EsUnidGestion = ? ORDER BY orden");
     $es=$tipo-5;
     $sel -> bind_param('si',$CodPadre,$es);
   }elseif ($tipo == 6)
   {
-    $sel = $con->prepare("SELECT id, descripcion, nivel FROM tipo_unidades_gestion where idpa = ? ORDER BY codigo");
+    $sel = $con->prepare("SELECT id, descripcion, nivel FROM tipo_unidades_gestion where idpa = ? ORDER BY orden");
     $sel -> bind_param('s',$CodPadre);
   }else{
-  $sel = $con->prepare("SELECT id, descripcion, nivel FROM red_organizacional where idpa = ? and tipo = ? ORDER BY descripcion");
+  $sel = $con->prepare("SELECT id, descripcion, nivel FROM red_organizacional where idpa = ? and tipo = ? ORDER BY orden");
   $sel->bind_param("si", $CodPadre,$tipo);
   }
   $sel -> execute();
@@ -111,6 +125,44 @@ function mostrararbol($CodPadre,$tipo)
     mostrararbol($codigo,$tipo);
   }
   echo '</li>';
+  if($hijos > 0){
+    echo '</ul>';
+  }
+}
+function mostrararbollista($CodPadre,$tipo)
+{
+  $clase='';
+  include '../conexion/conexion.php';
+  if ($tipo == 5)
+  {
+    $sel = $con->prepare("SELECT id, descripcion, nivel FROM tipo_unidades_gestion where idpa = ? AND EsUnidGestion = ? ORDER BY orden");
+    $es=$tipo-5;
+    $sel -> bind_param('si',$CodPadre,$es);
+  }elseif ($tipo == 6)
+  {
+    $sel = $con->prepare("SELECT id, descripcion, nivel FROM tipo_unidades_gestion where idpa = ? ORDER BY orden");
+    $sel -> bind_param('s',$CodPadre);
+  }else{
+  $sel = $con->prepare("SELECT id, descripcion, nivel FROM red_organizacional where idpa = ? and tipo = ? ORDER BY orden");
+  $sel->bind_param("si", $CodPadre,$tipo);
+  }
+  $sel -> execute();
+  $sel-> store_result();
+  $sel -> bind_result($codigo, $descripcion, $nivel );
+  $hijos = numerohijos($CodPadre,$tipo);
+  if($hijos > 0){
+    echo '<ul>';
+  }
+  $t='li';
+  while ($sel->fetch()) {
+    //  echo '<li><i class="small material-icons">folder</i> '.$descripcion.'';
+    $h=numerohijos($codigo,$tipo);
+    $h == 0?$clase='item':$clase='header';
+    $h == 0?$t='a':$t='li';
+    echo "<".$t." id='".$codigo."' class='collection-".$clase."'> <span>".$descripcion."</span>";
+    mostrararbollista($codigo,$tipo);
+  }
+  echo '</'.$t.'>';
   if($hijos > 0){
     echo '</ul>';
   }
@@ -161,23 +213,142 @@ function mayor($id,$tipo)
   }
   return 0;
 }
+function periodos($idcompania, $idorganizacion)
+{
+  include '../conexion/conexion.php';
+  $sel = $con->prepare("SELECT DISTINCT	p.fecha FROM gastos g INNER JOIN produccion p ON g.fecha = p.fecha WHERE p.idcompania = ? AND p.organizacion = ? ");
+  $sel->bind_param('ii', $idcompania,$idorganizacion);
+  $sel->execute();
+  $sel->bind_result($fecha);
+
+  while($sel->fetch()): ?>
+      <option value="<?php echo $fecha?>"><?php echo $fecha?></option>
+    <?php endwhile;
+    $sel ->close();
+  return 0;
+}
 function descripcion($tipo)
 {
- if ($tipo == 1)
- {
-   return 'Red Organizacional';
- }elseif ($tipo == 2) {
-   return 'Nivel Complejidad';
- }elseif ($tipo == 3) {
-   return 'Categoria y tipo Recurso Humano';
- }elseif ($tipo == 4) {
-  return 'Categoria y tipo Insumo';
-}elseif ($tipo == 5) {
- return 'Grupo Unidad de gestión';
-}elseif ($tipo == 6) {
- return 'Unidad de gestión';
-}else {
-  return '';
+   if ($tipo == 1)
+   {
+     return 'Red Organizacional';
+   }elseif ($tipo == 2) {
+     return 'Nivel Complejidad';
+   }elseif ($tipo == 3) {
+     return 'Categoria y tipo Recurso Humano';
+   }elseif ($tipo == 4) {
+    return 'Categoria y tipo Insumo';
+  }elseif ($tipo == 5) {
+   return 'Grupo Unidad de gestión';
+  }elseif ($tipo == 6) {
+   return 'Unidad de gestión';
+  }else {
+    return '';
+  }
 }
+function pertenece($CodPadre,$tipo)
+{
+  $clase='';
+  include '../conexion/conexion.php';
+  if ($tipo == 5)
+  {
+    $sel = $con->prepare("SELECT id, descripcion, nivel FROM tipo_unidades_gestion where idpa = ? AND EsUnidGestion = ? ");
+    $es=$tipo-5;
+    $sel -> bind_param('si',$CodPadre,$es);
+  }elseif ($tipo == 6)
+  {
+    $sel = $con->prepare("SELECT id, descripcion, nivel FROM tipo_unidades_gestion where idpa = ? ORDER BY codigo");
+    $sel -> bind_param('s',$CodPadre);
+  }else{
+  $sel = $con->prepare("SELECT id, descripcion, nivel FROM red_organizacional where idpa = ? and tipo = ? ORDER BY descripcion");
+  $sel->bind_param("si", $CodPadre,$tipo);
+  }
+  $sel -> execute();
+  $sel-> store_result();
+  $sel -> bind_result($codigo, $descripcion, $nivel );
+  while ($sel->fetch()) {
+    $sel->close();
+    $con->close();
+    return true;
+  }
+  pertenece($codigo,$tipo);
+  $sel->close();
+  $con->close();
+  return false;
+}
+function obtenerdosfila($prod,$rows,$sel_unid,$funcion, $primaria,$fecha)
+{
+  include '../conexion/conexion.php';
+  $i=0;
+  $p=1;
+  $total=0;
+  $sel_unid->data_seek(0);
+  $sel_unid -> bind_result($idug, $unidadgestion);
+  $estotal = $funcion==null && $primaria==null;
+  $esporcentaje =$funcion==100 && $primaria==100;
+ while ($sel_unid ->fetch()):
+   if($prod==null){
+     $sel_prod = $con->prepare("SELECT if(primaria = 1, 'PRODUCCION PRIMARIA', 'PRODUCION SECUNDARIA'), sum(rubro) FROM produccion h INNER JOIN tipo_unidades_gestion ug ON h.producto = ug.id WHERE unidadgestion = ? and ug.Funcion = ? and primaria = ? and h.fecha = ? group by producto, primaria");
+     $sel_prod -> bind_param('iiis', $idug,$funcion,$primaria,$fecha);
+
+   }
+   elseif ($estotal) {
+     $sel_prod = $con->prepare("SELECT unidadgestion, sum(rubro) FROM produccion h INNER JOIN tipo_unidades_gestion ug ON h.producto = ug.id WHERE unidadgestion = ? and h.fecha = ? group by unidadgestion");
+      $sel_prod -> bind_param('is', $idug,$fecha);
+   }
+   elseif ($esporcentaje) {
+     $sel_prod = $con->prepare("SELECT unidadgestion, (sum(rubro)*100)/(select sum(rubro) from produccion) FROM produccion h INNER JOIN tipo_unidades_gestion ug ON h.producto = ug.id WHERE unidadgestion = ? and h.fecha = ? group by unidadgestion");
+     $sel_prod -> bind_param('is', $idug,$fecha);
+   }
+   else {
+     $sel_prod = $con->prepare("SELECT if(primaria = 1, CONCAT (ug.descripcion,' - ', ug.UnidProdPrim),CONCAT(ug.descripcion,' - ', ug.UnidProdSec)), sum(rubro) FROM produccion h INNER JOIN tipo_unidades_gestion ug ON h.producto = ug.id WHERE unidadgestion = ? and ug.Funcion = ? and primaria = ? and producto = ? and h.fecha = ? group by producto, primaria");
+     $sel_prod -> bind_param('iiiis', $idug,$funcion,$primaria,$prod,$fecha);
+     $sql="SELECT if(primaria = 1, CONCAT (ug.descripcion,' - ', ug.UnidProdPrim),CONCAT(ug.descripcion,' - ', ug.UnidProdSec)), sum(rubro) FROM produccion h INNER JOIN tipo_unidades_gestion ug ON h.producto = ug.id WHERE unidadgestion = ? and ug.Funcion = ? and primaria = ? and producto = ? and h.fecha = ? group by producto, primaria".$idug.$funcion.$primaria.$prod;
+   }
+
+  //print_r($idug.$funcion.$primaria.$rows.$idug);
+    $sel_prod -> execute();
+    $sel_prod-> store_result();
+    $sel_prod -> bind_result($idin, $insumo);
+  //  print_r($sel_unid);
+  //  print_r($sql);
+   while ($sel_prod ->fetch()):
+     if ($i ==$rows && $p==0):
+       $p=1;
+       $i=0;
+       $total=0;
+     endif;
+     echo $p==1&&(!$estotal&&!$esporcentaje)?"<div class='divTableRow'><div class='divTableCell'>".$idin."</div>":'';
+     ?>
+     <div class="divTableCell number"><?php echo ($estotal||$esporcentaje?'<b>':'').number_format($insumo, 2, ',', ' ').($estotal||$esporcentaje?'</b>':'')?></div>
+   <?php
+   $total +=$insumo;
+   echo $i==$rows-1?"<div class='divTableCell number'><b>".number_format($total, 2, ',', ' ')."</b></div></div>":'';
+   $p=0;
+   $i++;
+  endwhile;
+endwhile;
+}
+
+function categoryTree($parent_id = 0, $sub_mark = ''){
+      include '../conexion/conexion.php';
+      $deshabilitado = '';
+    //$query = $db->query("SELECT * FROM categories WHERE parent_id = $parent_id ORDER BY name ASC");
+    $query = $con->query("SELECT idpa, id, descripcion, (SELECT EXISTS(SELECT DISTINCT idpa FROM tipo_unidades_gestion m where m.idpa= a.id)) mayor  FROM tipo_unidades_gestion a where id NOT IN
+       (SELECT unidadgestion FROM unidadgestion_organizacion) AND idpa = $parent_id ORDER BY orden ASC");
+    if($query->num_rows > 0){
+        while($row = $query->fetch_assoc()){
+          if($row['mayor'] == 1)
+          {
+            $deshabilitado = 'disabled-link';
+            $ref= '';
+        }
+          else {
+            $ref= 'href="#!"';
+          }
+            echo '<a class="collection-item '.$deshabilitado.'" '.$ref.' id="'.$row['id'].'">'.$sub_mark.$row['descripcion'].'</a>';
+            categoryTree($row['id'], $sub_mark.'-');
+        }
+    }
 }
 ?>

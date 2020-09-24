@@ -1,0 +1,1 @@
+SELECT uo.unidadgestion,tu.Descripcion, tu.unidprodprim, tu.unidprodsec FROM unidadgestion_organizacion uo INNER JOIN tipo_unidades_gestion tu ON tu.id = uo.unidadgestion WHERE organizacion = 1 order by tu.id

@@ -1,0 +1,53 @@
+<?php include '../extend/header.php';
+include '../extend/funciones.php';
+$cuadro= $_GET['n'];
+?>
+<div class="col s12">
+  <div class="card">
+    <div class="card-content">
+      <div class="row">
+        <h3>Cuadro # <?php echo $cuadro ?></h3>
+        <div class="col s6">
+          <input id= "cuadro" type="hidden" name="" value="<?php echo $cuadro ?>">
+          <?php
+          $sel_org = $con->prepare("SELECT DISTINCT o.id, o.descripcion FROM organizacion o INNER JOIN unidadgestion_organizacion uo ON o.id = uo.organizacion ");
+          $sel_org -> execute();
+          $sel_org-> store_result();
+          $sel_org -> bind_result($idor, $organizacion);
+          ?>
+          <label for="organizacion">Organización</label>
+             <select id="organizacion"class="form-control">
+                 <?php while ($sel_org ->fetch()): ?>
+                   <option value="<?php echo $idor?>"><?php echo $organizacion?> <?php !isset($val_org)?$val_org=$idor:$val_org?></option>
+                 <?php endwhile;
+                 $sel_org ->close();
+                 ?>
+             </select>
+        </div>
+        <div class="col s2">
+           <label for="periodo">Periodo</label>
+           <select id="periodo"class="form-control">
+               <?php periodos(1,$val_org);
+               ?>
+           </select>
+         </div>
+         <div class="col s1">
+              <a id ='preliminar' class="btn-floating btn-large blue left" style= "margin-left: 5px;"><i
+                class="material-icons">search</i></a>
+         </div>
+      </div>
+    </div>
+  </div>
+</div>
+<?php include '../extend/scripts.php'; ?>
+<script type="text/javascript">
+  $('#preliminar').click(function () {
+    if ($('#cuadro').val() == 1){
+        window.location.href = 'uno.php?c='+$('#organizacion').val()+'&f='+ $('#periodo').val();
+    }else if ($('#cuadro').val() == 2){
+        window.location.href = 'dos.php?c='+$('#organizacion').val()+'&f='+ $('#periodo').val();
+    }else if($('#cuadro').val() == 4)
+          window.location.href = 'cuatro.php?c='+$('#organizacion').val()+'&f='+ $('#periodo').val();
+    })
+
+</script>

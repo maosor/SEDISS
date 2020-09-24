@@ -4,12 +4,18 @@ include '../extend/funciones.php';
 if($_POST){
   $organizacion=$_POST['organizacion'];
   $fecha=$_POST['fecha'];
-    $del = $con->prepare("DELETE FROM gastos WHERE idorganizacion=? and fecha = ? ");
-    $del->bind_param('is',  $organizacion,$fecha);
-    if ($del -> execute()) {
-        header('location:../extend/alerta.php?msj=Borrado=Datos borrados...&c=gd&p=in&t=info');
-    }else {
-    echo 'Error actualizando...';
+  $accion=$_POST['accion'];
+  if($accion == '#insumos'){
+    $del = $con->prepare("DELETE FROM gastos WHERE organizacion=? and fecha = ? ");
+  }else if($accion == '#horas') {
+    $del = $con->prepare("DELETE FROM horas WHERE organizacion=? and fecha = ? ");
+  }
+  $del->bind_param('is',  $organizacion,$fecha);
+    echo 'Insertado: SQL ==> '.$organizacion.$fecha;
+  if ($del -> execute()) {
+      header('location:../extend/alerta.php?msj=Borrado=Datos borrados...&c=gd&p=in&t=info');
+  }else {
+    echo 'Error borrando...';
   }
 $del->close();
 $con->close();

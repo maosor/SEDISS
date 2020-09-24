@@ -20,7 +20,7 @@ textarea.materialize-textarea:focus:not([readonly]) {
 .prefix{
   color: #0d47a1 !important;
 }
-.dropdown-content li > a, .dropdown-content li:not(.disabled) > span, .collection a.collection-item {
+.dropdown-content li > a, .dropdown-content li:not(.disabled) > span, .collection a.collection-item:not(.disabled-link):not(.active) {
   color:#0d47a1 !important;
 }
 .tabs .tab a:hover, .tabs .tab a.active
@@ -78,12 +78,21 @@ textarea.materialize-textarea:focus:not([readonly]) {
   height: 200px;
   overflow-y: scroll;
 }
-.dvinsumo, .dvunidad{
+.dvinsumo, .dvunidad, .dvcel {
   border:1px solid #eee;
 }
-.dvinsumo * {
+.dvinsumo *, .dvhora *,.dvcel * {
   height: 30px;
 }
-.dvinsumo{
+.dvinsumo, .dvhora, .dvcel{
   line-height: 50px;
+}
+.hidden{
+  display: none;
+}
+.disabled-link{
+    cursor: default;
+    pointer-events: none;
+    text-decoration: none;
+    color: grey !important;
 }

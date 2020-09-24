@@ -32,15 +32,15 @@ if ($sel->fetch()) {
  }
    else {
      $hidden = false;
-     $nivel=0;$orden=0;
+     $nivel=0;$orden='';
      $padcodigo=''; $paddescripcion='';$padnivel=0;
      $hereda=0; $camas=0; $comprensiva=0; $primaria=''; $secundaria=''; $prelativo=0; $srelativo=0;
    }
    if ($tipo > 4)
    {
-     $sel_lst = $con->prepare("SELECT id, descripcion, nivel FROM tipo_unidades_gestion where EsUnidGestion = 0 ORDER BY descripcion");
+     $sel_lst = $con->prepare("SELECT id, descripcion, nivel FROM tipo_unidades_gestion where EsUnidGestion = 0  and idpa = 0 ORDER BY orden");
    }else {
-     $sel_lst = $con->prepare("SELECT id, descripcion, nivel FROM red_organizacional where tipo = ? ORDER BY descripcion");
+     $sel_lst = $con->prepare("SELECT id, descripcion, nivel FROM red_organizacional where tipo = ? and (id in (select idpa from red_organizacional) or idpa = 0) ORDER BY descripcion");
      $sel_lst -> bind_param('i',$tipo);
   }
    $sel_lst -> execute();
@@ -66,7 +66,7 @@ if ($sel->fetch()) {
       <label for="idpa">Padre</label>
       <select  class="form-control" id="idpa" name="idpa" required value = "1">
         <option value="<?php echo $idpa?>" selected disabled><?php echo padre($idpa,$tipo)?></option>
-        <option value="" ></option>
+        <option value="" >---PADRE---</option>
           <?php while ($sel_lst ->fetch()): ?>
             <option nivel='<?php echo $padnivel?>' value="<?php echo $padid?>"><?php echo $paddescripcion?></option>
           <?php endwhile;
@@ -81,9 +81,13 @@ if ($sel->fetch()) {
      </div>
    </div>
     <div class="row">
-     <div class = "input-field col s12">
+     <div class = "input-field col s8">
        <input type="text" name="descripcion" title="descripcion" id="descripcion" focus=true value="<?php echo $descripcion ?>" >
        <label class="active" for="descripcion">Descripción</label>
+     </div>
+     <div class = "input-field col s4">
+       <input type="text" name="orden" title="orden" id="orden" focus=true value="<?php echo $orden ?>" >
+       <label class="active" for="orden">Prioridad</label>
      </div>
    </div>
  <!-- Se ocultó porque no se mostrará si no lo solicitan -->
@@ -91,10 +95,6 @@ if ($sel->fetch()) {
      <div class = "input-field col s6">
        <input type="text" name="nivel" title="nivel" id="nivel" focus=true value="<?php echo $nivel ?>" >
        <label class="active" for="nivel">Nivel</label>
-     </div>
-     <div class = "input-field col s6">
-       <input type="text" name="orden" title="orden" id="orden" focus=true value="<?php echo $orden ?>" >
-       <label class="active" for="orden">Orden</label>
      </div>
    </div>
 </div>
@@ -148,9 +148,9 @@ if ($sel->fetch()) {
     <div class="col s3">
     <label for="funcion">Función</label>
     <select id="funcion"class="form-control">
-      <option value="<?php echo $Funcion?>" disabled selected><?php echo $Funcion==1?'Final':$Funcion==2?'Apoyo':''?></option>
-      <option value="1">Final</option>
-      <option value="2">Apoyo</option>
+      <option value="<?php echo $Funcion?>" disabled selected><?php echo $Funcion==0?'Final':'Apoyo'?></option>
+      <option value="0">Final</option>
+      <option value="1">Apoyo</option>
     </select>
 
  </div>

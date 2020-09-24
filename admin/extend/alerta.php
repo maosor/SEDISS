@@ -17,8 +17,8 @@
       case 'eje':
         $carpeta = '../ejecutivos/';
         break;
-      case 'suc':
-          $carpeta = '../sucursales/';
+      case 'red':
+          $carpeta = '../redorganizacional/';
           break;
       case 'typ':
           $carpeta = '../tiposyperfiles/';
@@ -42,7 +42,7 @@
           $carpeta = '../contactos/';
           break;
       case 'com':
-          $carpeta = '../comentarios/';
+          $carpeta = '../companias/';
           break;
       case 'prop':
         $carpeta = '../propiedades/';
@@ -78,6 +78,10 @@
     elseif (isset($_GET['a'])) {
       $a = htmlentities($_GET['a']);
       $dir=$carpeta.$pagina.'?a='.$a;
+    }
+    elseif (isset($_GET['o'])) {
+      $o = htmlentities($_GET['o']);
+      $dir=$carpeta.$pagina.'?o='.$o;
     }
     else {
       $dir = $carpeta.$pagina;
