@@ -8,7 +8,7 @@
   </head>
   <body>
     <?php
-    $mensage  = html_entity_decode($_GET['msj']);
+    $mensaje  = html_entity_decode($_GET['msj']);
     $c = htmlentities($_GET['c']);
     $p = htmlentities($_GET['p']);
     $t = htmlentities($_GET['t']);
@@ -103,7 +103,7 @@
     <script>
     swal({
     title: '<?php echo $titulo ?>',
-    text: "<?php echo $mensage  ?>",
+    text: "<?php echo $mensaje  ?>",
     type: '<?php echo $t ?>',
     confirmButtonColor: '#3085d6',
     confirmButtonText: 'Ok'

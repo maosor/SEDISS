@@ -4,18 +4,20 @@ include '../extend/funciones.php';
 if ($_SERVER['REQUEST_METHOD']== 'POST'){
 $org= htmlentities($_POST['id']);
 $uni=htmlentities($_POST['unidad']);
+$compania = $_SESSION['compania'];
   $del = $con->prepare("DELETE FROM unidadgestion_organizacion WHERE organizacion = ? AND unidadgestion = ? ");
   $del -> bind_param('ii',$org, $uni);
   if ($del -> execute()) {
     $sel_uni_org= $con->prepare("SELECT id, descripcion FROM tipo_unidades_gestion where id not in (SELECT DISTINCT idpa FROM tipo_unidades_gestion) AND id NOT IN
-    (SELECT unidadgestion FROM unidadgestion_organizacion where organizacion = ?) ");
-    $sel_uni_org -> bind_param('i',$org);
+    (SELECT unidadgestion FROM unidadgestion_organizacion where organizacion = ?) AND id_compania = ? ");
+    $sel_uni_org -> bind_param('ii',$org,$compania);
     $sel_uni_org-> execute();
     $sel_uni_org-> bind_result($uniorgid, $uniorgdescripcion );
-         while ($sel_uni_org ->fetch()): ?>
-            <a class="collection-item" href="#!" id="<?php echo $uniorgid?>"><?php echo $uniorgdescripcion?></a>
-          <?php endwhile;
+         //while ($sel_uni_org ->fetch()): ?>
+            <!-- <a class="collection-item" href="#!" id="<?php //echo $uniorgid?>"><?php //echo $uniorgdescripcion?></a> -->
+          <?php // endwhile;
           $sel_uni_org ->close();
+          categoryTree(0,'',$org);
 }else {
     echo 'Error Eliminando...';
   }

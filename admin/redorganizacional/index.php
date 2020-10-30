@@ -5,7 +5,7 @@ include '../extend/funciones.php'; ?>
 <script src="../js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="../css/treeview.css">
 <?php
-
+$compania = $_SESSION['compania'];
 if (!isset($_GET['o']))
 {
   $tipo=1;
@@ -15,8 +15,8 @@ else {
   $tipo=htmlentities($_GET['o']);
   $oculta = '';
 }
-$sel = $con->prepare("SELECT codigo, descripcion, nivel FROM red_organizacional WHERE tipo = ? ORDER BY codigo");
-$sel -> bind_param("i", $tipo);
+$sel = $con->prepare("SELECT codigo, descripcion, nivel FROM red_organizacional WHERE tipo = ? and id_compania = ? ORDER BY codigo");
+$sel -> bind_param("ii", $tipo,$compania);
 $sel -> execute();
 $sel-> store_result();
 $sel -> bind_result($codigo, $descripcion, $nivel );
@@ -38,7 +38,7 @@ $row = $sel->num_rows;
                  <ul id="tree1">
                    <li>DIVISION</li>
 
-                   <?php mostrararbol(0,$tipo);?>
+                   <?php mostrararbol(0,$tipo,$compania);?>
                  </ul>
                </div>
              </div>

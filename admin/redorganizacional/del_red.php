@@ -2,6 +2,7 @@
 <?php
 include '../conexion/conexion.php';
 include '../extend/funciones.php';
+$compania = $_SESSION['compania'];
 if ($_SERVER['REQUEST_METHOD']== 'POST'){
   foreach ($_POST as $campo => $valor) {
   $variable = "$".$campo."='".htmlentities($valor)."';";
@@ -10,20 +11,20 @@ if ($_SERVER['REQUEST_METHOD']== 'POST'){
   if(isset($_POST['tipo'])){
     if ($tipo > 4)
     {
-      $up = $con->prepare("DELETE FROM tipo_unidades_gestion WHERE id=? ");
-      $up->bind_param('i',  $id);
+      $up = $con->prepare("DELETE FROM tipo_unidades_gestion WHERE id=? AND id_compania = ?");
+      $up->bind_param('ii',  $id,$compania);
     }else {
-      $up = $con->prepare("DELETE FROM red_organizacional WHERE id=? ");
-      $up->bind_param('i', $id);
+      $up = $con->prepare("DELETE FROM red_organizacional WHERE id=? AND id_compania = ?");
+      $up->bind_param('ii', $id,$compania);
     }
   }else {
-    $up = $con->prepare("DELETE FROM organizacion WHERE id=? ");
-    $up->bind_param('i', $id);
+    $up = $con->prepare("DELETE FROM organizacion WHERE id=? AND idcompania = ?");
+    $up->bind_param('ii', $id,$compania);
     $tipo=1;
   }
 
     if ($up -> execute()) {
-     mostrararbol('000000000000000000000000000000000000000000000000000000000000',$tipo);
+     mostrararbol(0,$tipo,$compania);
   }else {
     echo 'Error actualizando...';
   }

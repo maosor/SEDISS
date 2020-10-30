@@ -14,9 +14,10 @@
 <?php
 include '../conexion/conexion.php';
 include '../extend/funciones.php';
+$compania = $_SESSION['compania'];
 $idpa = htmlentities($_POST['id']);
-  $sel = $con->prepare("SELECT id, descripcion, complejidad, poblacion FROM organizacion where idpa = ? ORDER BY descripcion ");
-  $sel -> bind_param('i', $idpa);
+  $sel = $con->prepare("SELECT id, descripcion, complejidad, poblacion FROM organizacion where idpa = ? AND idcompania = ? ORDER BY descripcion ");
+  $sel -> bind_param('ii', $idpa, $compania);
   $sel -> execute();
   $sel -> bind_result($id, $descripcion,$complejidad,$poblacion );
 $hidden = false;
@@ -46,7 +47,8 @@ if ($sel->fetch()) {
    </div>
    <div class = "row">
      <?php
-      $sel_niv= $con->prepare("SELECT id, descripcion FROM red_organizacional where tipo = 2 AND id not in (SELECT DISTINCT idpa FROM red_organizacional where tipo = 2) ORDER BY descripcion");
+      $sel_niv= $con->prepare("SELECT id, descripcion FROM red_organizacional where tipo = 2 AND id not in (SELECT DISTINCT idpa FROM red_organizacional where tipo = 2) AND id_compania = ? ORDER BY descripcion");
+      $sel_niv -> bind_param('i', $compania);
       $sel_niv-> execute();
       $sel_niv-> bind_result($nivid, $nivdescripcion ); ?>
      <label for="complejidad">Nivel de complejidad</label>
@@ -67,10 +69,11 @@ if ($sel->fetch()) {
    <div class = "row">
      <input type="hidden" name="unidad" id="unidad">
      <?php
-      $sel_uni= $con->prepare("SELECT id, descripcion FROM tipo_unidades_gestion where id not in (SELECT DISTINCT idpa FROM tipo_unidades_gestion) AND id NOT IN
-      (SELECT unidadgestion FROM unidadgestion_organizacion) ORDER BY orden");
+      /*$sel_uni= $con->prepare("SELECT id, descripcion FROM tipo_unidades_gestion where id not in (SELECT DISTINCT idpa FROM tipo_unidades_gestion) AND id NOT IN
+      (SELECT unidadgestion FROM unidadgestion_organizacion) AND id_compania = ? ORDER BY orden");
+      $sel_uni -> bind_param('i', $compania);
       $sel_uni-> execute();
-      $sel_uni-> bind_result($uniid, $unidescripcion ); ?>
+      $sel_uni-> bind_result($uniid, $unidescripcion ); */?>
      <label for="unidadgestion">Unidades de Gestión</label>
      <a id ='add' class="btn-floating  blue darken-4 right"  style= "margin-left: 5px;" disabled><i
        class="material-icons">arrow_downward</i></a>
@@ -79,14 +82,14 @@ if ($sel->fetch()) {
               <!-- <?php //while ($sel_uni ->fetch()): ?>
               <a class="collection-item" href="#!" id="<?php //echo $uniid?>"><?php //echo $unidescripcion?></a>
             <?php //endwhile;
-            $sel_uni ->close();?> -->
-            <?php categoryTree(); ?>
+          /*  $sel_uni ->close();*/?> -->
+            <?php categoryTree(0,'',$id); ?>
         </div>
    </div>
    <div class = "row">
      <?php
-      $sel_uni_org= $con->prepare("SELECT ug.id, ug.descripcion FROM unidadgestion_organizacion uo INNER JOIN tipo_unidades_gestion ug ON uo.unidadgestion = ug.id WHERE uo.organizacion = ? ORDER BY ug.descripcion");
-      $sel_uni_org -> bind_param('i',$id);
+      $sel_uni_org= $con->prepare("SELECT ug.id, ug.descripcion FROM unidadgestion_organizacion uo INNER JOIN tipo_unidades_gestion ug ON uo.unidadgestion = ug.id WHERE uo.organizacion = ? AND ug.id_compania = ? ORDER BY ug.funcion, Concat(0,(select orden from tipo_unidades_gestion where id = ug.idpa), ug.orden)*1");
+      $sel_uni_org -> bind_param('ii',$id,$compania);
       $sel_uni_org-> execute();
       $sel_uni_org-> bind_result($uniorgid, $uniorgdescripcion ); ?>
       <label for="unidadgestionorganizacion">Unidades de Gestión de la Organización</label>

@@ -34,20 +34,26 @@ if ($_POST){
   $sql="INSERT INTO produccion (idcompania, organizacion, unidadgestion, producto, fecha, rubro, tiporeg, primaria) VALUES ";
     //  print_r($data);
   foreach ($data as $item){
-      $n=2;
+      $n=1;
       foreach ($item->produccion as $valor) {
         if ($valor->Rubro == '')
         {
           $valor->Rubro=0;
         }
-        if($n==1)
+/*        if($n==1)
         {
-          $n = 2;
+            $n = 2;
         }
-        else {
-          $n = 1;
-        }
+        else if($n==2) {
+          if (!count($item->produccion)==3) {
+            $n = 3;
+          }else {
+              $n = 1;
+          }
+        }*/
+
         $sql=$sql."(1, ".$organizacion.", ".explode("-",$item->Id)[1].", ".ltrim($valor->Id,'p-').", '".$fecha."', ".$valor->Rubro.", 'E', ".$n."),";
+        $n++;
       }
   }
   $sql= rtrim($sql,","); // Elimina la ultima coma generada.

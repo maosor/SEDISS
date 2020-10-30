@@ -94,5 +94,6 @@ textarea.materialize-textarea:focus:not([readonly]) {
     cursor: default;
     pointer-events: none;
     text-decoration: none;
-    color: grey !important;
+    color: gray !important;
+    font-weight: bold;
 }

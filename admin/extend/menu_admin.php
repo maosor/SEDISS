@@ -44,7 +44,7 @@ $sel_compania->fetch();
     </li>
     <li><a href="../inicio"><i class="material-icons">home</i>INICIO</li></a>
     <li><div class="divider"></div></li>
-    <li><a href="../companias"><i class="material-icons">domain</i>Compañías</li></a>
+    <li><a href="../companias"><i class="material-icons">domain</i>Países</li></a>
     <li><div class="divider"></div></li>
     <li><a class="dropdown-button" href="#!" data-activates="ddclasificacion"><i class="material-icons">device_hub</i>Organización
       <i class="material-icons right">arrow_drop_down</i></a></li>
@@ -59,7 +59,7 @@ $sel_compania->fetch();
     <li><div class="divider"></div></li> -->
     <!-- <li><a href="../contactos"><i class="material-icons">perm_contact_calendar</i>Contactos</li></a>
     <li><div class="divider"></div></li> -->
-    <li><a href="../login/salir.php"><i class="material-icons">power_setting_new</i>SALIR</li></a>
+    <li><a href="../extend/pregunta.php"><i class="material-icons">power_setting_new</i>SALIR</li></a>
     <li><div class="divider"></div></li>
   </ul>
 
@@ -75,5 +75,6 @@ $sel_compania->fetch();
   <ul id="ddcuadros" class="dropdown-content">
     <li><a href="../cuadro/index.php?n=1">Uno</a></li>
     <li><a href="../cuadro/index.php?n=2">Dos</a></li>
+    <li><a href="../cuadro/index.php?n=3a">Tres A</a></li>
     <li><a href="../cuadro/index.php?n=4">Cuatro</a></li>
  </ul>

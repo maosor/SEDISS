@@ -2,6 +2,7 @@
 <?php
 include '../conexion/conexion.php';
 include '../extend/funciones.php';
+$compania = $_SESSION['compania'];
 if ($_SERVER['REQUEST_METHOD']== 'POST'){
   foreach ($_POST as $campo => $valor) {
   $variable = "$".$campo."='".htmlentities($valor)."';";
@@ -12,27 +13,28 @@ if($idpa == '' or $idpa == null )
 {
   $idpa = '0';
 }
+ $c=$camas=='true'?1:0;
 if(isset($_POST['tipo'])){
   if ($tipo > 4)
   {
-    $ins = $con->prepare("INSERT INTO tipo_unidades_gestion (Descripcion, Nivel, Orden,
+    $ins = $con->prepare("INSERT INTO tipo_unidades_gestion (id_compania, Descripcion, Nivel, Orden,
        idpa,Hereda,TieneCamas,Comprensiva,UnidProdPrim, UnidProdSec,UnidProdValorRel1,UnidProdValorRel2,RecursoNuclear,Funcion,PerteneceA)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
-    $ins -> bind_param('siiiiiissiisii', $descripcion, $nivel, $orden,
-    $idpa, $hereda, $camas, $comprensiva, $primaria, $secundaria, $prelativo, $srelativo,$RecursoNuclear,$funcion,$pertenece);
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
+    $ins -> bind_param('isiiiiiissiisii',$compania, $descripcion, $nivel, $orden,
+    $idpa, $hereda, $c, $comprensiva, $primaria, $secundaria, $prelativo, $srelativo,$RecursoNuclear,$funcion,$pertenece);
   }
   else {
-      $ins = $con->prepare("INSERT INTO red_organizacional (Descripcion, Nivel, Orden, idpa, tipo) VALUES (?,?,?,?,?) ");
-      $ins -> bind_param('siiii', $descripcion, $nivel, $orden, $idpa,$tipo);
+      $ins = $con->prepare("INSERT INTO red_organizacional (id_compania, Descripcion, Nivel, Orden, idpa, tipo) VALUES (?,?,?,?,?,?) ");
+      $ins -> bind_param('isiiii',$compania, $descripcion, $nivel, $orden, $idpa,$tipo);
     }
 }else {
-  $ins = $con->prepare("INSERT INTO organizacion (Descripcion, complejidad, poblacion, idpa) VALUES (?,?,?,?) ");
-  $ins -> bind_param('siii', $descripcion, $complejidad, $poblacion, $idpa);
+  $ins = $con->prepare("INSERT INTO organizacion (idcompania, Descripcion, complejidad, poblacion, idpa) VALUES (?,?,?,?,?) ");
+  $ins -> bind_param('isiii',$compania, $descripcion, $complejidad, $poblacion, $idpa);
   $tipo=1;
 }
 
 if ($ins -> execute()) {
-   mostrararbol('0',$tipo);
+   mostrararbol('0',$tipo,$compania);
 }else {
   echo 'Error Insertando...';
 }

@@ -1,3 +1,59 @@
+function cargaGrids() {
+  $.post("gridinsumo.php",{
+    organizacion:$('#organizacion').val(),
+    fecha:$('#periodo').val(),
+    beforeSend: function () {
+      $("#insumos").html('Espere un momento por favor');
+     }
+   }, function (respuesta) {
+        $("#insumos").html(respuesta)
+  });
+  $.post("gridproduccion.php",{
+    organizacion:$('#organizacion').val(),
+    fecha:$('#periodo').val(),
+    beforeSend: function () {
+      $("#produccion").html('Espere un momento por favor');
+     }
+   }, function (respuesta) {
+        $("#produccion").html(respuesta)
+  });
+  $.post("gridhora.php",{
+    organizacion:$('#organizacion').val(),
+    fecha:$('#periodo').val(),
+    beforeSend: function () {
+      $("#horas").html('Espere un momento por favor');
+     }
+   }, function (respuesta) {
+        $("#horas").html(respuesta)
+  });
+}
+$(document).ready(function() {
+var esnuevo = localStorage['Nuevo'];
+if(esnuevo==null)
+{
+  localStorage['Nuevo']=false;
+  esnuevo = localStorage['Nuevo'];
+}
+if (esnuevo=="false")
+{
+  cargaGrids();
+}
+  localStorage['Nuevo']=false;
+});
+$('#organizacion').change (function () {
+  cargaGrids();
+})
+$('#new').click(function () {
+  localStorage['Nuevo'] = true;
+  var selOrg = $("#organizacion").val();
+//  location.reload(false);
+$('#insumos').load(location.href + " #insumos");
+$('#produccion').load(location.href + " #produccion");
+$('#horas').load(location.href + " #horas");
+//$( "#periodo" ).datepicker({dateFormat:"yy/mm/dd"}).datepicker("setDate",Date.now());
+$('#periodo').val(new Date().toDateString());
+
+});
 $('#up').click(function() {
   // $.each([ 52, 97 ], function( index, value ) {
 var unidades=[];

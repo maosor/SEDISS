@@ -187,7 +187,6 @@ function padre($id,$tipo)
     return '';
   }
 }
-
 function nivel($id)
 {
   include '../conexion/conexion.php';
@@ -227,23 +226,6 @@ function periodos($idcompania, $idorganizacion)
     <?php endwhile;
     $sel ->close();
   return 0;
-}
-function ultimoPeriodo($tabla, $idcompania, $idorganizacion)
-{
-  include '../conexion/conexion.php';
-  $sel = $con->prepare("SELECT MAX(fecha) FROM horas WHERE idcompania = ? AND organizacion = ?");
-  $sel->bind_param('ii', $idcompania,$idorganizacion);
-  $sel->execute();
-  $sel->bind_result($fecha);
-
-  if($sel->fetch()){
-    $fecha=date_create($fecha);
-    return date_format($fecha,"Y-m-d");
-  }
-    else {
-      return Date("Y-m-d");
-    }
-    $sel ->close();
 }
 function descripcion($tipo)
 {
@@ -348,7 +330,7 @@ function obtenerdosfila($prod,$rows,$sel_unid,$funcion, $primaria,$fecha)
 endwhile;
 }
 
-function categoryTree($parent_id = 0, $sub_mark = '',$organizacion){
+function categoryTree($parent_id, $sub_mark = '',$organizacion){
       include '../conexion/conexion.php';
       $deshabilitado = '';
       $compania = $_SESSION['compania'];
@@ -356,9 +338,20 @@ function categoryTree($parent_id = 0, $sub_mark = '',$organizacion){
       {
         $organizacion = 0;
       }
+      if ($parent_id == -1)
+      {
+        echo "Else".$parent_id;
+        $parent_id = 0;
+        $query = $con->query("SELECT ug.id, ug.descripcion,(SELECT EXISTS(SELECT DISTINCT idpa FROM tipo_unidades_gestion m where m.idpa= a.id)) mayor FROM unidadgestion_organizacion uo INNER JOIN tipo_unidades_gestion ug ON uo.unidadgestion = ug.id
+           WHERE uo.organizacion = $organizacion AND ug.id_compania = $compania AND idpa = $parent_id order by orden");
+
+      }else {
+         $query = $con->query("SELECT idpa, id, descripcion, (SELECT EXISTS(SELECT DISTINCT idpa FROM tipo_unidades_gestion m where m.idpa= a.id)) mayor  FROM tipo_unidades_gestion a where id NOT IN
+           (SELECT unidadgestion FROM unidadgestion_organizacion where organizacion = $organizacion) AND idpa = $parent_id AND id_compania = $compania ORDER BY orden ASC");
+      }
     //$query = $db->query("SELECT * FROM categories WHERE parent_id = $parent_id ORDER BY name ASC");
-    $query = $con->query("SELECT idpa, id, descripcion, (SELECT EXISTS(SELECT DISTINCT idpa FROM tipo_unidades_gestion m where m.idpa= a.id)) mayor  FROM tipo_unidades_gestion a where id NOT IN
-       (SELECT unidadgestion FROM unidadgestion_organizacion where organizacion = $organizacion) AND idpa = $parent_id AND id_compania = $compania ORDER BY orden ASC");
+    // $query = $con->query("SELECT idpa, id, descripcion, (SELECT EXISTS(SELECT DISTINCT idpa FROM tipo_unidades_gestion m where m.idpa= a.id)) mayor  FROM tipo_unidades_gestion a where id NOT IN
+    //    (SELECT unidadgestion FROM unidadgestion_organizacion where organizacion = $organizacion) AND idpa = $parent_id AND id_compania = $compania ORDER BY orden ASC");
     if($query->num_rows > 0){
         while($row = $query->fetch_assoc()){
           if($row['mayor'] == 1)

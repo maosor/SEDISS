@@ -42,12 +42,14 @@ $cuadro= $_GET['n'];
 <?php include '../extend/scripts.php'; ?>
 <script type="text/javascript">
   $('#preliminar').click(function () {
-    if ($('#cuadro').val() == 1){
+    if ($('#cuadro').val() == '1'){
         window.location.href = 'uno.php?c='+$('#organizacion').val()+'&f='+ $('#periodo').val();
-    }else if ($('#cuadro').val() == 2){
+    }else if ($('#cuadro').val() == '2'){
         window.location.href = 'dos.php?c='+$('#organizacion').val()+'&f='+ $('#periodo').val();
-    }else if($('#cuadro').val() == 4)
+    }else if($('#cuadro').val() == '3a'){
+          window.location.href = 'tresa.php?c='+$('#organizacion').val()+'&f='+ $('#periodo').val();
+    }else if($('#cuadro').val() == '4'){
           window.location.href = 'cuatro.php?c='+$('#organizacion').val()+'&f='+ $('#periodo').val();
-    })
+    }})
 
 </script>

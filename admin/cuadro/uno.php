@@ -2,7 +2,7 @@
 include '../extend/funciones.php';
 include '../conexion/conexion.php'
 ?>
-<style media="screen">
+<style>
 html{
   font-family: Arial Narrow,Arial,sans-serif;
   font-size: 11px;
@@ -62,7 +62,7 @@ else {
       $sel_clasif -> bind_param('iis',$organizacion, $val_org,$fecha);
       $sel_clasif -> execute();
       $sel_clasif-> store_result();
-      $sel_clasif -> bind_result($Funcion, $Servicios, $Unidad_Produccion, $Primario, $Secundario, $Volumen_Produccion, $Costo_Total, $Costo_Unitario, $Camas, $Indice_ocupacional, $Promedio_Estancia, $Indice_Rotación);
+      $sel_clasif -> bind_result($Ordenar, $Funcion, $Servicios, $Unidad_Produccion, $Primario, $Secundario, $Volumen_Produccion, $Costo_Total, $Costo_Unitario, $Camas, $Indice_ocupacional, $Promedio_Estancia, $Indice_Rotación);
        ?>
       <div class="divTable">
         <div class="divTableBody">

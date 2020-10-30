@@ -11,17 +11,18 @@ include '../conexion/conexion.php';
 include '../extend/funciones.php';
 $id = htmlentities($_POST['id']);
 $tipo = htmlentities($_POST['tipo']);
+$compania = $_SESSION['compania'];
 if ($tipo > 4)
 {
   $sel = $con->prepare("SELECT id, codigo, descripcion, idpa, nivel,orden, Hereda, TieneCamas, Comprensiva,
-    UnidProdPrim, UnidProdSec, UnidProdValorRel1, UnidProdValorRel2,RecursoNuclear,Funcion,PerteneceA  FROM tipo_unidades_gestion where id = ? ORDER BY descripcion");
-  $sel -> bind_param('s',$id);
+    UnidProdPrim, UnidProdSec, UnidProdValorRel1, UnidProdValorRel2,RecursoNuclear,Funcion,PerteneceA  FROM tipo_unidades_gestion where id = ? and id_compania = ? ORDER BY descripcion");
+  $sel -> bind_param('si',$id,$compania);
   $sel -> execute();
   $sel -> bind_result($id, $codigo, $descripcion,$idpa,$nivel,$orden, $hereda, $camas, $comprensiva,
   $primaria, $secundaria, $prelativo, $srelativo,$RecursoNuclear,$Funcion,$PerteneceA );
 }else {
-  $sel = $con->prepare("SELECT id, codigo, descripcion, idpa, nivel,orden FROM red_organizacional where id = ? and tipo = ? ORDER BY descripcion");
-  $sel -> bind_param('si',$id,$tipo);
+  $sel = $con->prepare("SELECT id, codigo, descripcion, idpa, nivel,orden FROM red_organizacional where id = ? and tipo = ? and id_compania = ? ORDER BY descripcion");
+  $sel -> bind_param('sii',$id,$tipo,$compania);
   $sel -> execute();
   $sel -> bind_result($id, $codigo, $descripcion,$idpa,$nivel,$orden );
   $hereda=0; $camas=0; $comprensiva=0; $primaria=''; $secundaria=''; $prelativo=0; $srelativo=0;$RecursoNuclear=0;$Funcion=0;$PerteneceA=0;
@@ -38,10 +39,11 @@ if ($sel->fetch()) {
    }
    if ($tipo > 4)
    {
-     $sel_lst = $con->prepare("SELECT id, descripcion, nivel FROM tipo_unidades_gestion where EsUnidGestion = 0  and idpa = 0 ORDER BY orden");
+     $sel_lst = $con->prepare("SELECT id, descripcion, nivel FROM tipo_unidades_gestion where EsUnidGestion = 0  and idpa = 0 and id_compania = ? ORDER BY orden");
+     $sel_lst -> bind_param('i',$compania);
    }else {
-     $sel_lst = $con->prepare("SELECT id, descripcion, nivel FROM red_organizacional where tipo = ? and (id in (select idpa from red_organizacional) or idpa = 0) ORDER BY descripcion");
-     $sel_lst -> bind_param('i',$tipo);
+     $sel_lst = $con->prepare("SELECT id, descripcion, nivel FROM red_organizacional where tipo = ? and (id in (select idpa from red_organizacional) or idpa = 0) and id_compania = ?  ORDER BY descripcion");
+     $sel_lst -> bind_param('ii',$tipo,$compania);
   }
    $sel_lst -> execute();
    $sel_lst -> bind_result($padid, $paddescripcion,$padnivel );
@@ -101,21 +103,21 @@ if ($sel->fetch()) {
  </div>
 <div class="grupos <?php echo $tipo < 5 ?'hidden':''?>">
   <div class="row">
-    <div class="col s4">
+    <!-- <div class="col s4">
       <input type="checkbox" class="filled-in" name="hereda"
-      id="hereda" <?php echo $hereda==1?"checked":""?>/>
+      id="hereda" <?php //echo $hereda==1?"checked":""?>/>
       <label for="hereda">Hereda </label>
-    </div>
+    </div> -->
       <div class="col s4">
       <input type="checkbox" class="filled-in" name="camas"
-      id="camas" <?php echo $camas==1?"checked":""?>/>
+      id="camas" <?php echo $camas==1?"checked":""?> />
       <label for="camas">Tiene Camas</label>
     </div>
-    <div class="col s4">
+    <!-- <div class="col s4">
       <input type="checkbox" class="filled-in" name="comprensiva"
-      id="comprensiva" <?php echo $comprensiva==1?"checked":""?>/>
+      id="comprensiva" <?php //echo $comprensiva==1?"checked":""?>/>
       <label for="comprensiva">Comprensiva</label>
-    </div>
+    </div> -->
   </div>
   <div class="row">
     <div class = "input-field col s8">
@@ -156,7 +158,8 @@ if ($sel->fetch()) {
  </div>
     <div class = "col s5">
       <?php
-       $sel_per= $con->prepare("SELECT id, descripcion FROM red_organizacional where tipo = 3 AND id not in (SELECT DISTINCT codpadre FROM red_organizacional where tipo = 3) ORDER BY descripcion");
+       $sel_per= $con->prepare("SELECT id, descripcion FROM red_organizacional where tipo = 3 AND id not in (SELECT DISTINCT codpadre FROM red_organizacional where tipo = 3)and id_compania = ?  ORDER BY descripcion");
+       $sel_per -> bind_param('i',$compania);
        $sel_per-> execute();
        $sel_per-> bind_result($perid, $perdescripcion ); ?>
       <label for="pertenece">Pertenece a</label>
@@ -183,6 +186,7 @@ if ($sel->fetch()) {
      idpa:$('#idpa option:selected').val(),
      descripcion:$('#descripcion').val(),
      nivel:$('#nivel').val(),
+     camas:$('#camas').is(":checked"),
      orden:$('#orden').val(),
      primaria:$('#primaria').val(),
      prelativo:$('#prelativo').val(),
@@ -205,6 +209,7 @@ if ($sel->fetch()) {
      idpa:$('#idpa option:selected').val(),
      descripcion:$('#descripcion').val(),
      nivel:$('#nivel').val(),
+     camas:$('#camas').is(":checked"),
      orden:$('#orden').val(),
      primaria:$('#primaria').val(),
      prelativo:$('#prelativo').val(),

@@ -2,7 +2,7 @@
 include '../extend/funciones.php';
 include '../conexion/conexion.php'
 ?>
-<style media="screen">
+<style>
 html{
   font-family: Arial Narrow,Arial,sans-serif;
   font-size: 11px;
@@ -45,9 +45,10 @@ display: table-row-group;
    width: 300px; /*3 times the standard cell width of 100px - colspan3 */
  }
 </style>
-<?php echo "Establecimiento: ".compania($_SESSION ['compania'])."<br>";
+<?php ///echo "Establecimiento: ".compania($_SESSION ['compania'])."<br>";
+echo sprintf("Establecimiento: %s  <br>", compania($_SESSION ['compania']));
 echo "Cuadro N° 2: INDICES DE RENDIMIENTO SERVICIOS COMPLEMENTARIOS <br>";
-echo "Mes de: Julio, 2020 <br>"; ?>
+echo "Mes de: ".date_format(date_create($_GET['f']),"d,F Y"); ?>
 <div class="row">
     <div id="insumos" class="col s12">
     <?php
