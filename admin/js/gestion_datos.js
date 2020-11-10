@@ -41,7 +41,9 @@ if (esnuevo=="false")
   localStorage['Nuevo']=false;
 });
 $('#organizacion').change (function () {
-  cargaGrids();
+  //$('#periodo').val(document.write('<?php ultimoPeriodo(1,2)?>'));
+  $("#dvperiodo").load(location.href + "recargarperiodo.php?org="+$('#organizacion').val()+"&com="+$('#comp').val());
+  window.setTimeout( cargaGrids, 500 );
 })
 $('#new').click(function () {
   localStorage['Nuevo'] = true;
@@ -51,14 +53,14 @@ $('#insumos').load(location.href + " #insumos");
 $('#produccion').load(location.href + " #produccion");
 $('#horas').load(location.href + " #horas");
 //$( "#periodo" ).datepicker({dateFormat:"yy/mm/dd"}).datepicker("setDate",Date.now());
-$('#periodo').val(new Date().toDateString());
+//$('#periodo').val(new Date().toDateString());
 
 });
 $('#up').click(function() {
   // $.each([ 52, 97 ], function( index, value ) {
 var unidades=[];
-var ref = $(".tabs .active").attr('href');
-if(ref=== "#insumos"){
+//var ref = $(".tabs .active").attr('href');
+var ref= "#insumos";
   var insumo=[];
   $('#insumos div .dvunidad').each(function (iu, univalor) {
     var unidad = {};
@@ -81,8 +83,26 @@ if(ref=== "#insumos"){
       unidades.push(unidad);
 
   });
-}
-if(ref=== "#produccion"){
+  unidades = JSON.stringify(unidades);
+    $.ajax({
+      type: "POST",
+      url: "ins_up_gestion_datos.php",
+      data: {
+        mydata:unidades,
+        organizacion:$('#organizacion').val(),
+        fecha:$('#periodo').val(),
+        accion:ref,
+      },
+      success:function (respuesta) {
+          //console.log(respuesta);
+          $(ref).html(respuesta);
+      },
+      error:function () {
+        console.log('No respuesta...');
+      }
+    });
+    unidades=[];
+ref= "#produccion";
   var produccion=[];
   $('#produccion div .dvunidad').each(function (iu, univalor) {
     var unidad = {};
@@ -99,8 +119,26 @@ if(ref=== "#produccion"){
       produccion=[];
       unidades.push(unidad);
   });
-}
-else if (ref=== "#horas"){
+  unidades = JSON.stringify(unidades);
+    $.ajax({
+      type: "POST",
+      url: "ins_up_gestion_datos.php",
+      data: {
+        mydata:unidades,
+        organizacion:$('#organizacion').val(),
+        fecha:$('#periodo').val(),
+        accion:ref,
+      },
+      success:function (respuesta) {
+          //console.log(respuesta);
+          $(ref).html(respuesta);
+      },
+      error:function () {
+        console.log('No respuesta...');
+      }
+    });
+    unidades=[];
+ref= "#horas";
     var hora=[];
   $('#horas div .dvunidad').each(function (iu, univalor) {
     var unidad = {};
@@ -123,7 +161,7 @@ else if (ref=== "#horas"){
       unidades.push(unidad);
 
   });
-}
+
 unidades = JSON.stringify(unidades);
   $.ajax({
     type: "POST",
@@ -142,6 +180,7 @@ unidades = JSON.stringify(unidades);
       console.log('No respuesta...');
     }
   });
+  cargaGrids();
 });
 
 $('#sync').click(function () {
@@ -165,15 +204,52 @@ $('#sync').click(function () {
   });
 });
 $('#del').click(function () {
-var ref = $(".tabs .active").attr('href');
+//var ref = $(".tabs .active").attr('href');
+swal({
+title: '¿Esta seguro que desea borrar los datos?',
+text: "Después de borrados no se podrán recuperar",
+type: 'error',
+showCancelButton: true,
+confirmButtonColor: '#3085d6',
+cancelButtonColor: '#d33',
+confirmButtonText: 'Si, quiero borrarlos!'
+}).then((result) => {
+  if (result.value) {
+  ref= "#insumos";
   $.post('del_gestion_datos.php',{
     organizacion:$('#organizacion').val(),
     fecha:$('#periodo').val(),
     accion:ref,
     beforeSend: function () {
-      $(ref).html('Espere un momento por favor');
+      $(ref).html('');
      }
    }, function (respuesta) {
         $(ref).html(respuesta)
   });
+  ref= "#produccion";
+    $.post('del_gestion_datos.php',{
+      organizacion:$('#organizacion').val(),
+      fecha:$('#periodo').val(),
+      accion:ref,
+      beforeSend: function () {
+        $(ref).html('');
+       }
+     }, function (respuesta) {
+          $(ref).html(respuesta)
+    });
+ref = ref= "#horas";
+
+    $.post('del_gestion_datos.php',{
+      organizacion:$('#organizacion').val(),
+      fecha:$('#periodo').val(),
+      accion:ref,
+      beforeSend: function () {
+        $(ref).html('');
+       }
+     }, function (respuesta) {
+          $(ref).html(respuesta)
+    });
+  }
+});
+
 });

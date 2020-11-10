@@ -228,10 +228,10 @@ function periodos($idcompania, $idorganizacion)
     $sel ->close();
   return 0;
 }
-function ultimoPeriodo($tabla, $idcompania, $idorganizacion)
+function ultimoPeriodo($idcompania, $idorganizacion)
 {
   include '../conexion/conexion.php';
-  $sel = $con->prepare("SELECT MAX(fecha) FROM horas WHERE idcompania = ? AND organizacion = ?");
+  $sel = $con->prepare("SELECT max(fecha) FROM gastos WHERE idcompania = ? AND organizacion = ?");
   $sel->bind_param('ii', $idcompania,$idorganizacion);
   $sel->execute();
   $sel->bind_result($fecha);

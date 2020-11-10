@@ -28,7 +28,8 @@ $compania= $_SESSION['compania'];
              $sel_org -> bind_result($idor, $organizacion);
              $orgactual = null;
              ?>
-             <input id = "OrgActual"type ="hidden">
+             <input id = "OrgActual"type ="hidden" value="<?php echo $orgactual; ?>">
+             <input id = "comp"type ="hidden" value="<?php echo $compania; ?>">
              <label for="organizacion">Organización</label>
                 <select id="organizacion"class="form-control">
                     <?php if($sel_org->affected_rows==0){
@@ -48,10 +49,9 @@ $compania= $_SESSION['compania'];
                 </select>
 
            </div>
-
-           <div class="col s2">
+           <div id = "dvperiodo"class="col s2">
               <label for="periodo">Periodo</label>
-              <input id ="periodo" type="text" class = "datepicker" name="periodo" value="<?php echo ultimoPeriodo("horas", $compania, $orgactual) ?>">
+              <input id ="periodo" type="text" class = "datepicker" name="periodo" value="<?php echo ultimoPeriodo($compania, $orgactual) ?>">
             </div>
             <div class="col s1">
               <a id ='sync' class="btn-floating btn-large green left" style= "margin-left: 5px;"><i

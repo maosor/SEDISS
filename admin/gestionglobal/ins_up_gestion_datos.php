@@ -83,15 +83,15 @@ else if($accion == '#horas')
     if($accion=='#insumos')
     {
       //echo 'insumos';
-      include 'gridinsumo.php';
+      //include 'gridinsumo.php';
     }else if($accion=='#produccion')
     {
     //  echo 'insumos';
-      include 'gridproduccion.php';
+      //include 'gridproduccion.php';
     }else if($accion=='#horas')
     {
       //echo 'insumos';
-      include 'gridhora.php';
+      //include 'gridhora.php';
     }
 
   }else {

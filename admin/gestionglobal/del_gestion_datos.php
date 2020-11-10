@@ -14,9 +14,9 @@ if($_POST){
     $del = $con->prepare("DELETE FROM horas WHERE idcompania = ? AND organizacion=? AND fecha = ? ");
   }
   $del->bind_param('iis', $compania, $organizacion,$fecha);
-    echo 'Insertado: SQL ==> '.$organizacion.$fecha;
+    ///echo 'Insertado: SQL ==> '.$organizacion.$fecha;
   if ($del -> execute()) {
-      header('location:../extend/alerta.php?msj=Borrado=Datos borrados...&c=gd&p=in&t=info');
+      //header('location:../extend/alerta.php?msj=Borrado=Datos borrados...&c=gd&t=info');
   }else {
     echo 'Error borrando...';
   }
