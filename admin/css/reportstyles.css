@@ -48,8 +48,8 @@ display: table-row-group;
   margin: 0;
 }
 .sinBordeTop{
-  border-top:none;
+  border-top: 1px solid #FFF;
 }
 .sinBordeBottom{
-  border-bottom:none;
+  border-bottom: 1px solid #FFF;
 }

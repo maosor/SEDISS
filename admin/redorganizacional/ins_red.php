@@ -13,7 +13,9 @@ if($idpa == '' or $idpa == null )
 {
   $idpa = '0';
 }
- $c=$camas=='true'?1:0;
+if(isset($camas)){
+   $c=$camas=='true'?1:0;
+}
 if(isset($_POST['tipo'])){
   if ($tipo > 4)
   {

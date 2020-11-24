@@ -11,24 +11,29 @@ if ($_SERVER['REQUEST_METHOD']== 'POST'){
   if(isset($_POST['tipo'])){
     if ($tipo > 4)
     {
-      $up = $con->prepare("DELETE FROM tipo_unidades_gestion WHERE id=? AND id_compania = ?");
-      $up->bind_param('ii',  $id,$compania);
+      $del = $con->prepare("DELETE FROM tipo_unidades_gestion WHERE id=? AND id_compania = ? AND NOT EXISTS(SELECT * FROM (SELECT null from tipo_unidades_gestion where idpa =?)AS u)");
+      $del->bind_param('iii', $id,$compania,$id);
     }else {
-      $up = $con->prepare("DELETE FROM red_organizacional WHERE id=? AND id_compania = ?");
-      $up->bind_param('ii', $id,$compania);
+      $del = $con->prepare("DELETE FROM red_organizacional WHERE id=? AND id_compania = ? AND NOT EXISTS(SELECT * FROM (SELECT null from red_organizacional where idpa =?)AS r) ");
+      $del->bind_param('iii', $id,$compania,$id);
     }
   }else {
-    $up = $con->prepare("DELETE FROM organizacion WHERE id=? AND idcompania = ?");
-    $up->bind_param('ii', $id,$compania);
+    $del = $con->prepare("DELETE FROM organizacion WHERE id=? AND idcompania = ? and not EXISTS(SELECT * FROM (SELECT null from unidadgestion_organizacion where organizacion =?))AS u ");
+    $del->bind_param('iii', $id,$compania,$id);
     $tipo=1;
   }
 
-    if ($up -> execute()) {
-     mostrararbol(0,$tipo,$compania);
+    if ($del -> execute()) {
+      if($del->affected_rows > 0){
+        mostrararbol(0,$tipo,$compania);
+      }else {
+        header('location:../extend/alerta.php?msj=No se puede borrar un rubro que tiene hijos.\nDebe borrar todos sus hijos para poder borrarlo&c=red&p=in&t=error&o='.$tipo);
+      }
+
   }else {
-    echo 'Error actualizando...';
+    echo 'Error Borrando...';
   }
-$up->close();
+$del->close();
 $con->close();
 }else {
   header('location:../extend/alerta.php?msj=Utiliza el formulario&c=suc&p=in&t=error');

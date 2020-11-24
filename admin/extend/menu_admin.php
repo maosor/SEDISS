@@ -76,5 +76,6 @@ $sel_compania->fetch();
     <li><a href="../cuadro/index.php?n=1">Uno</a></li>
     <li><a href="../cuadro/index.php?n=2">Dos</a></li>
     <li><a href="../cuadro/index.php?n=3a">Tres A</a></li>
+    <li><a href="../cuadro/index.php?n=3b">Tres B</a></li>
     <li><a href="../cuadro/index.php?n=4">Cuatro</a></li>
  </ul>

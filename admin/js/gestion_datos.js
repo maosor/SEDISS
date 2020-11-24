@@ -47,11 +47,10 @@ $('#organizacion').change (function () {
 })
 $('#new').click(function () {
   localStorage['Nuevo'] = true;
-  var selOrg = $("#organizacion").val();
-//  location.reload(false);
-$('#insumos').load(location.href + " #insumos");
-$('#produccion').load(location.href + " #produccion");
-$('#horas').load(location.href + " #horas");
+$("#OrgActual").val($("#organizacion").val()) ;
+$('#insumos').load(location.href + "?id="+$("#organizacion").val() +" #insumos");
+$('#produccion').load(location.href + "?id="+$("#organizacion").val() + " #produccion");
+$('#horas').load(location.href + "?id="+$("#organizacion").val()+ " #horas");
 //$( "#periodo" ).datepicker({dateFormat:"yy/mm/dd"}).datepicker("setDate",Date.now());
 //$('#periodo').val(new Date().toDateString());
 

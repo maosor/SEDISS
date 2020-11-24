@@ -26,7 +26,7 @@ $compania= $_SESSION['compania'];
              $sel_org -> execute();
              $sel_org-> store_result();
              $sel_org -> bind_result($idor, $organizacion);
-             $orgactual = null;
+                          $orgactual = null;
              ?>
              <input id = "OrgActual"type ="hidden" value="<?php echo $orgactual; ?>">
              <input id = "comp"type ="hidden" value="<?php echo $compania; ?>">
@@ -40,6 +40,7 @@ $compania= $_SESSION['compania'];
                       <?php if ($orgactual == null):
                         $orgactual= $idor;
                       endif; ?>
+
                         <option value="<?php echo $idor?>"><?php echo $organizacion?> <?php !isset($val_org)?$val_org=$idor:$val_org?></option>
                     <?php
                       endwhile;
@@ -80,6 +81,9 @@ $compania= $_SESSION['compania'];
                   </div>
                 </div>
                 <?php
+                if(isset($_GET['id'])){
+                  $val_org = $_GET['id'];
+                }
                 $sel_unid = $con->prepare("SELECT uo.unidadgestion,tu.Descripcion FROM unidadgestion_organizacion uo INNER JOIN tipo_unidades_gestion tu ON tu.id = uo.unidadgestion WHERE tu.id_compania = ? AND organizacion = ? order by funcion, CONCAT((SELECT orden FROM tipo_unidades_gestion WHERE id_compania = ? and id = tu.idpa),tu.orden)*1,orden");
                 $sel_unid -> bind_param('iii',$compania, $val_org,$compania);
                 $sel_unid -> execute();
@@ -137,6 +141,9 @@ $compania= $_SESSION['compania'];
                 </div>
               </div>
               <?php
+              if(isset($_GET['id'])){
+                $val_org = $_GET['id'];
+              }
               $sel_unid_final = $con->prepare("SELECT uo.unidadgestion,tu.Descripcion, tu.unidprodprim, tu.unidprodsec,tu.TieneCamas FROM unidadgestion_organizacion uo INNER JOIN tipo_unidades_gestion tu ON tu.id = uo.unidadgestion WHERE tu.id_compania =? AND organizacion = ? and tu.funcion = 0 order by CONCAT((SELECT orden FROM tipo_unidades_gestion WHERE id_compania = ? and id = tu.idpa),tu.orden)*1,orden");
               $sel_unid_final -> bind_param('iii',$compania, $val_org,$compania);
               $sel_unid_final -> execute();
@@ -279,6 +286,9 @@ $compania= $_SESSION['compania'];
                 </div>
               </div>
               <?php
+              if(isset($_GET['id'])){
+                $val_org = $_GET['id'];
+              }
               $sel_unid = $con->prepare("SELECT uo.unidadgestion,tu.Descripcion FROM unidadgestion_organizacion uo INNER JOIN tipo_unidades_gestion tu ON tu.id = uo.unidadgestion WHERE id_compania =? AND organizacion = ? order by CONCAT((SELECT orden FROM tipo_unidades_gestion WHERE id_compania = ? and id = tu.idpa),tu.orden)*1,orden");
               $sel_unid -> bind_param('iii', $compania,$val_org,$compania);
               $sel_unid -> execute();

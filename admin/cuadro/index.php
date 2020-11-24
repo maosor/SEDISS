@@ -48,6 +48,8 @@ $cuadro= $_GET['n'];
         window.location.href = 'dos.php?c='+$('#organizacion').val()+'&f='+ $('#periodo').val();
     }else if($('#cuadro').val() == '3a'){
           window.location.href = 'tresa.php?c='+$('#organizacion').val()+'&f='+ $('#periodo').val();
+    }else if($('#cuadro').val() == '3b'){
+          window.location.href = 'tresb.php?c='+$('#organizacion').val()+'&f='+ $('#periodo').val();
     }else if($('#cuadro').val() == '4'){
           window.location.href = 'cuatro.php?c='+$('#organizacion').val()+'&f='+ $('#periodo').val();
     }})
