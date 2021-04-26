@@ -1,6 +1,7 @@
 <?php include '../extend/header.php';
 include '../extend/funciones.php';
 $cuadro= $_GET['n'];
+$compania= $_SESSION['compania'];
 ?>
 <div class="col s12">
   <div class="card">
@@ -9,8 +10,10 @@ $cuadro= $_GET['n'];
         <h3>Cuadro # <?php echo $cuadro ?></h3>
         <div class="col s6">
           <input id= "cuadro" type="hidden" name="" value="<?php echo $cuadro ?>">
+          <input id = "comp" type ="hidden" value="<?php echo $compania; ?>">
           <?php
-          $sel_org = $con->prepare("SELECT DISTINCT o.id, o.descripcion FROM organizacion o INNER JOIN unidadgestion_organizacion uo ON o.id = uo.organizacion ");
+          $sel_org = $con->prepare("SELECT DISTINCT o.id, o.descripcion FROM organizacion o INNER JOIN unidadgestion_organizacion uo ON o.id = uo.organizacion WHERE o.idcompania = ? ");
+          $sel_org->bind_param('i', $compania);
           $sel_org -> execute();
           $sel_org-> store_result();
           $sel_org -> bind_result($idor, $organizacion);
@@ -24,10 +27,10 @@ $cuadro= $_GET['n'];
                  ?>
              </select>
         </div>
-        <div class="col s2">
+        <div id= 'periodoscuadros'class="col s2">
            <label for="periodo">Periodo</label>
            <select id="periodo"class="form-control">
-               <?php periodos(1,$val_org);
+               <?php echo $compania.$val_org; periodos($compania,$val_org);
                ?>
            </select>
          </div>
@@ -52,6 +55,13 @@ $cuadro= $_GET['n'];
           window.location.href = 'tresb.php?c='+$('#organizacion').val()+'&f='+ $('#periodo').val();
     }else if($('#cuadro').val() == '4'){
           window.location.href = 'cuatro.php?c='+$('#organizacion').val()+'&f='+ $('#periodo').val();
-    }})
+    }else if($('#cuadro').val() == 'e'){
+          window.location.href = 'evaluacion.php?c='+$('#organizacion').val()+'&f='+ $('#periodo').val();
+    }
+  })
 
+    $('#organizacion').change (function () {
+      $("#periodoscuadros").load("recargarperiodocuadros.php?org="+$('#organizacion').val()+"&com="+$('#comp').val());
+
+    })
 </script>

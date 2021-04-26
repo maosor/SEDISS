@@ -37,8 +37,13 @@ $row = $sel->num_rows;
                <div class="">
                  <ul id="tree1">
                    <li>DIVISION</li>
-
-                   <?php mostrararbol(0,$tipo,$compania);?>
+                   <?php $inicio =0;
+                    if ($tipo==5 || $tipo==6 ){
+                     $inicio=unidadmenor($id);
+                   }
+                   //echo $inicio;
+                   ?>
+                   <?php mostrararbol($inicio,$tipo,$compania);?>
                  </ul>
                </div>
              </div>

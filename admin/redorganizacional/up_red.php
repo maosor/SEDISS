@@ -19,23 +19,25 @@ if ($_SERVER['REQUEST_METHOD']== 'POST'){
     if(isset($_POST['tipo'])){
         if ($tipo > 4)
         {
-          $up = $con->prepare("UPDATE tipo_unidades_gestion SET id_compania=?, descripcion=?, idpa=?,nivel=?, orden=?,Hereda=?,TieneCamas=?,Comprensiva=?,UnidProdPrim=?, UnidProdSec=?,UnidProdValorRel1=?,UnidProdValorRel2=?,RecursoNuclear=?,Funcion=?,PerteneceA=?  WHERE id=? ");
-          $up->bind_param('isiiiiiissiisiii',$compania, $descripcion, $idpa, $nivel, $orden, $hereda, $c, $comprensiva, $primaria, $secundaria, $prelativo, $srelativo,$RecursoNuclear,$funcion,$pertenece,$id);
+          $up = $con->prepare("UPDATE tipo_unidades_gestion SET descripcion=?, idpa=?,nivel=?, orden=?,Hereda=?,TieneCamas=?,Comprensiva=?,UnidProdPrim=?, UnidProdSec=?,UnidProdValorRel1=?,UnidProdValorRel2=?,RecursoNuclear=?,Funcion=?,PerteneceA=?  WHERE id=? and id_compania=?");
+          $up->bind_param('siiiiiissiisiiii', $descripcion, $idpa, $nivel, $orden, $hereda, $c, $comprensiva, $primaria, $secundaria, $prelativo, $srelativo,$RecursoNuclear,$funcion,$pertenece,$id,$compania);
           //echo "UPDATE tipo_unidades_gestion SET id_compania=?, descripcion=?, idpa=?,nivel=?, orden=?,Hereda=?,TieneCamas=?,Comprensiva=?,UnidProdPrim=?, UnidProdSec=?,UnidProdValorRel1=?,UnidProdValorRel2=?,RecursoNuclear=?,Funcion=?,PerteneceA=?  WHERE id=? ".$compania. $descripcion. $idpa. $nivel. $orden. $hereda. $camas. $comprensiva. $primaria. $secundaria. $prelativo. $srelativo.$RecursoNuclear.$funcion.$pertenece.$id;
         }else {
-          $up = $con->prepare("UPDATE red_organizacional SET id_compania=?, descripcion=?, idpa=?,nivel=?, orden=?  WHERE id=? ");
-          $up->bind_param('issiii',$compania, $descripcion, $idpa, $nivel, $orden, $id);
+          $up = $con->prepare("UPDATE red_organizacional SET descripcion=?, idpa=?,nivel=?, orden=?  WHERE id=? and id_compania=?");
+          $up->bind_param('ssiiii', $descripcion, $idpa, $nivel, $orden, $id,$compania);
+          addLog('UPDATE red_organizacional SET descripcion='.$descripcion.', idpa='.$idpa.',nivel='.$nivel.', orden='.$orden.'  WHERE id='.$id.' AND id_compania='.$compania);
         }
       }
       else {
-        $up = $con->prepare("UPDATE organizacion SET idcompania=?, descripcion=?, complejidad=?, poblacion=? WHERE id=? ");
-        $up->bind_param('isiii',$compania, $descripcion, $complejidad, $poblacion, $id);
+        $up = $con->prepare("UPDATE organizacion SET descripcion=?, complejidad=?, poblacion=? WHERE id=? and idcompania=?");
+        $up->bind_param('siiii', $descripcion, $complejidad, $poblacion, $id,$compania);
         $tipo=1;
       }
         if ($up -> execute()) {
           mostrararbol(0,$tipo,$compania);
         }else {
-          echo 'Error actualizando...';
+          echo 'Error actualizando... ';
+          addlog('Error actualizando: SQL Error --> '.$up->error);
         }
   $up->close();
   $con->close();

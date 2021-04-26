@@ -238,10 +238,10 @@ function ultimoPeriodo($idcompania, $idorganizacion)
 
   if($sel->fetch()){
     $fecha=date_create($fecha);
-    return date_format($fecha,"Y-m-d");
+    return date_format($fecha,"M-Y");
   }
     else {
-      return Date("Y-m-d");
+      return Date("M-Y");
     }
     $sel ->close();
 }
@@ -306,12 +306,17 @@ function obtenerdosfila($prod,$rows,$sel_unid,$funcion, $primaria,$fecha)
   $esporcentaje =$funcion==100 && $primaria==100;
  while ($sel_unid ->fetch()):
    if($prod==null){
-     $sel_prod = $con->prepare("SELECT if(primaria = 1, 'PRODUCCION PRIMARIA', 'PRODUCION SECUNDARIA'), sum(rubro) FROM produccion h INNER JOIN tipo_unidades_gestion ug ON h.producto = ug.id WHERE unidadgestion = ? and ug.Funcion = ? and primaria = ? and h.fecha = ? group by producto, primaria");
+     $sel_prod = $con->prepare("SELECT if(primaria = 1, 'EGRESOS/CONSULTAS', 'DÍA-PACIENTE'), sum(rubro) FROM produccion h INNER JOIN tipo_unidades_gestion ug ON h.producto = ug.id WHERE unidadgestion = ? and ug.Funcion = ? and primaria = ? and h.fecha = ? group by producto, primaria");
      $sel_prod -> bind_param('iiis', $idug,$funcion,$primaria,$fecha);
 
    }
    elseif ($estotal) {
      $sel_prod = $con->prepare("SELECT unidadgestion, sum(rubro) FROM produccion h INNER JOIN tipo_unidades_gestion ug ON h.producto = ug.id WHERE unidadgestion = ? and h.fecha = ? group by unidadgestion");
+      $sel_prod -> bind_param('is', $idug,$fecha);
+   }
+
+   elseif ($esunidad) {
+     $sel_prod = $con->prepare("SELECT 'POR  UNIDAD DE PROD. FINAL', sum(rubro) FROM produccion h INNER JOIN tipo_unidades_gestion ug ON h.producto = ug.id WHERE unidadgestion = ? and h.fecha = ? group by unidadgestion");
       $sel_prod -> bind_param('is', $idug,$fecha);
    }
    elseif ($esporcentaje) {
@@ -374,4 +379,29 @@ function categoryTree($parent_id = 0, $sub_mark = '',$organizacion){
         }
     }
 }
+function addLog ($mensaje){
+  $log  = "User: ".$_SERVER['REMOTE_ADDR'].' - '.date("F j, Y, g:i a").PHP_EOL.
+        //"Attempt: ".($result[0]['success']=='1'?'Success':'Failed').PHP_EOL.
+        "Trace: ".serialize(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)).PHP_EOL.
+        "User: ".$_SESSION ['nombre'].PHP_EOL.
+        "Message: ".$mensaje.PHP_EOL.
+        "-------------------------".PHP_EOL;
+//Save string to log, use FILE_APPEND to append.
+file_put_contents('../Logs/log_'.date("j.n.Y").'.log', $log, FILE_APPEND);
+}
+function unidadmenor($id)
+{
+  include '../conexion/conexion.php';
+  $sel = $con->prepare("SELECT min(idpa) from tipo_unidades_gestion where id_compania = ?");
+  $sel->bind_param('i', $id);
+  $sel->execute();
+  $sel->bind_result($menor);
+  if($sel->fetch()){
+    return $menor;
+  }
+  else {
+    return 0;
+  }
+}
+
 ?>

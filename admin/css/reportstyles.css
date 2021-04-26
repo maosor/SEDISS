@@ -38,6 +38,7 @@ display: table-row-group;
 }
 .number{
   text-align: right;
+  min-width: 100px;
 }
 .invisible{
   visibility: hidden;
@@ -52,4 +53,11 @@ display: table-row-group;
 }
 .sinBordeBottom{
   border-bottom: 1px solid #FFF;
+}
+.rowHeader{
+  min-width: 200px;
+}
+.incols
+{
+  display: table-cell;
 }

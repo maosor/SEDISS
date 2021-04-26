@@ -2,7 +2,8 @@
 include '../conexion/conexion.php';
 if($_POST){
   $organizacion=$_POST['organizacion'];
-  $fecha=$_POST['fecha'];
+  $fecha='01-'.$_POST['fecha'];
+  $fecha=date("Y-m-t", strtotime($fecha));
   $compania = $_SESSION['compania'];
 }
  ?>
@@ -36,7 +37,7 @@ while ($sel_unid ->fetch()): ?>
         </div>
         <div class="input-field col s8">
           <?php
-          $sel_insu = $con->prepare("SELECT ro.id, ro.descripcion, h.rubro from horas h inner join red_organizacional ro on h.recurso = ro.id and tipo = 3 WHERE h.idcompania = ? AND h.organizacion = ? AND  h.unidadgestion = ? AND fecha = ? order by orden,id ");
+          $sel_insu = $con->prepare("SELECT ro.id, ro.descripcion, h.rubro from horas h inner join red_organizacional ro on h.recurso = ro.id and tipo = 3 WHERE ro.id_compania = ? AND h.organizacion = ? AND  h.unidadgestion = ? AND fecha = ? order by orden,id ");
           $sel_insu -> bind_param('iiis',$compania, $organizacion,$idug, $fecha);
           $sel_insu -> execute();
           $sel_insu-> store_result();

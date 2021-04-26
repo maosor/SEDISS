@@ -67,30 +67,30 @@ else {
       <div class="divTable">
         <div class="divTableBody">
             <div class="divTableRow">
-              <div class="divTableCell "><b>Servicios</b></div>
-              <div class="divTableCell "><b>Unidad <br>de produccion </b></div>
-              <div class="divTableCell number"><b>Volumen <br>de Producción </b></div>
-              <div class="divTableCell number"><b>Costos <br>Totales</b></div>
-              <div class="divTableCell number"><b>Costos <br>Unitarios</b></div>
-              <div class="divTableCell number"><b>Indice <br>ocupacional</b></div>
-              <div class="divTableCell number"><b>Promedio <br>Estancia</b></div>
-              <div class="divTableCell number"><b>Indice <br>de Rotación</b></div>
-              <div class="divTableCell number"><b>Camas</b></div>
+              <div class="divTableCell " style='min-width: 180px;'><b>Servicios</b></div>
+              <div class="divTableCell " style='min-width: 180px;'><b>Unidad <br>de produccion </b></div>
+              <div class="divTableCell number" style='min-width: 100px;'><b>Volumen <br>de Producción </b></div>
+              <div class="divTableCell number" style='min-width: 100px;'><b>Costos <br>Totales</b></div>
+              <div class="divTableCell number" style='min-width: 100px;'><b>Costos <br>Unitarios</b></div>
+              <div class="divTableCell number" style='min-width: 80px;'><b>Indice <br>ocupacional</b></div>
+              <div class="divTableCell number" style='min-width: 80px;'><b>Promedio <br>Estancia</b></div>
+              <div class="divTableCell number" style='min-width: 80px;'><b>Indice <br>de Rotación</b></div>
+              <div class="divTableCell number" style='min-width: 80px;'><b>Camas</b></div>
             </div>
           <?php while ($sel_clasif ->fetch()):
 
             ?>
           <div class="divTableRow">
 
-              <div class="divTableCell "><b><?php echo $Funcion<>'02'?$Servicios:'' ?></b></div>
-              <div class="divTableCell "><?php echo $Unidad_Produccion ?></div>
-              <div class="divTableCell number"><?php echo number_format($Volumen_Produccion, 2, ',', ' ') ?></div>
-              <div class="divTableCell number"><?php echo $Funcion<>'02'?number_format($Costo_Total, 2, ',', ' '):'' ?></div>
-              <div class="divTableCell number"><?php echo number_format($Costo_Unitario, 2, ',', ' ') ?></div>
-              <div class="divTableCell number"><?php echo $Funcion=='02'?number_format($Indice_ocupacional, 2, ',', ' '):'' ?></div>
-              <div class="divTableCell number"><?php echo $Funcion=='02'?number_format($Promedio_Estancia, 2, ',', ' '):'' ?></div>
-              <div class="divTableCell number"><?php echo $Funcion=='02'?number_format($Indice_Rotación, 2, ',', ' '):'' ?></div>
-              <div class="divTableCell number"><?php echo $Funcion=='02'?number_format($Camas, 2, ',', ' '):'' ?></div>
+              <div class="divTableCell "style='min-width: 180px;'><b><?php echo $Funcion<>'02'?$Servicios:'' ?></b></div>
+              <div class="divTableCell "style='min-width: 180px;'><?php echo $Unidad_Produccion ?></div>
+              <div class="divTableCell number" style='min-width: 100px;'><?php echo number_format($Volumen_Produccion, 2, ',', ' ') ?></div>
+              <div class="divTableCell number" style='min-width: 100px;'><?php echo $Funcion<>'02'?number_format($Costo_Total, 2, ',', ' '):'' ?></div>
+              <div class="divTableCell number" style='min-width: 100px;'><?php echo number_format($Costo_Unitario, 2, ',', ' ') ?></div>
+              <div class="divTableCell number" style='min-width: 80px;'><?php echo $Funcion=='02'?number_format($Indice_ocupacional, 2, ',', ' '):'' ?></div>
+              <div class="divTableCell number" style='min-width: 80px;'><?php echo $Funcion=='02'?number_format($Promedio_Estancia, 2, ',', ' '):'' ?></div>
+              <div class="divTableCell number" style='min-width: 80px;'><?php echo $Funcion=='02'?number_format($Indice_Rotación, 2, ',', ' '):'' ?></div>
+              <div class="divTableCell number" style='min-width: 80px;'><?php echo $Funcion=='02'?number_format($Camas, 2, ',', ' '):'' ?></div>
             </div>
           <?php endwhile;
 

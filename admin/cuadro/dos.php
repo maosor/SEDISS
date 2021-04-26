@@ -47,7 +47,7 @@ display: table-row-group;
 </style>
 <?php ///echo "Establecimiento: ".compania($_SESSION ['compania'])."<br>";
 echo sprintf("Establecimiento: %s  <br>", compania($_SESSION ['compania']));
-echo "Cuadro N° 2: INDICES DE RENDIMIENTO SERVICIOS COMPLEMENTARIOS <br>";
+echo "Cuadro N° 2: RELACIONES DE PRODUCTIVIDAD DE LOS SERVICIOS DE APOYO, SERVICIOS FINALES<br>";
 echo "Mes de: ".date_format(date_create($_GET['f']),"d,F Y"); ?>
 <div class="row">
     <div id="insumos" class="col s12">
@@ -109,7 +109,7 @@ echo "Mes de: ".date_format(date_create($_GET['f']),"d,F Y"); ?>
             <div class="divTable">
               <div class="divTableBody">
                 <div class="divTableRow">
-                  <div class="divTableCell"><b>PRODUCTOS</b></div>
+                  <div class="divTableCell"><b></b></div>
                   <?php while ($sel_unid ->fetch()): ?>
                     <div class="divTableCell number"><b><?php echo $unidadgestion ?></b></div>
                   <?php endwhile; ?>

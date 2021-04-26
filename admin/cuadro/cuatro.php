@@ -29,7 +29,7 @@ else {
         $sel_unid -> bind_result($idug, $unidadgestion);
         $rows= $sel_unid->num_rows;
          ?>
-        <?php $sel_insum = $con->prepare("SELECT ro.descripcion, sum(rubro) FROM gastos g INNER JOIN red_organizacional ro ON g.insumo = ro.id and ro.tipo = 4 and g.fecha = ?	INNER JOIN tipo_unidades_gestion tu ON g.unidadgestion = tu.id
+        <?php $sel_insum = $con->prepare("SELECT ro.descripcion, sum(rubro) FROM gastos g INNER JOIN red_organizacional ro ON  g.idcompania = ro.id_compania and g.insumo = ro.id and ro.tipo = 4 and g.fecha = ?	INNER JOIN tipo_unidades_gestion tu ON g.unidadgestion = tu.id
         where EXISTS(select 1=1 from gastos where insumo = g.insumo and rubro > 0 and fecha = ? )
 	GROUP BY insumo,g.unidadgestion order by g.insumo, funcion, concat(0,(select orden from tipo_unidades_gestion t where id = tu.idpa), tu.orden)*1");
          $sel_insum -> bind_param('ss', $fecha,$fecha);
@@ -40,11 +40,11 @@ else {
         <div class="divTable">
           <div class="divTableBody">
               <div class="divTableRow">
-                <div class="divTableCell" style="width: 150px;"><b>COSTOS<br>DIRECTOS</b></div>
+                <div class="divTableCell rowHeader" ><b>COSTOS<br>DIRECTOS</b></div>
 
                 <?php $c=0;
                  while ($sel_unid ->fetch()): ?>
-                  <div class="divTableCell number"><b><?php echo $unidadgestion ?></b></div>
+                  <div class="divTableCell number" ><b><?php echo $unidadgestion ?></b></div>
 
                 <?php endwhile; ?>
                 <div class="divTableCell"><b>TOTAL</b></div>
@@ -55,7 +55,7 @@ else {
                   $i=0;
                   $total=0;
                 endif;
-                echo $p==1?"<div class='divTableRow'><div class='divTableCell'>".$idin."</div>":'';
+                echo $p==1?"<div class='divTableRow rowHeader'><div class='divTableCell'>".$idin."</div>":'';
                 ?>
                 <div class="divTableCell number"><?php echo number_format($insumo, 2, ',', ' ')?></div>
               <?php
@@ -66,8 +66,8 @@ else {
              endwhile;
              $total=0;?>
              <div class="divTableRow">
-               <div class="divTableCell"><b>TOTAL COSTOS DIRECTOS</b></div>
-               <?php $sel_unitot = $con->prepare("SELECT sum(rubro) FROM gastos g INNER JOIN red_organizacional ro ON g.insumo = ro.id and ro.tipo = 4  and g.fecha = ?
+               <div class="divTableCell "><b>TOTAL COSTOS DIRECTOS</b></div>
+               <?php $sel_unitot = $con->prepare("SELECT sum(rubro) FROM gastos g INNER JOIN red_organizacional ro ON  g.idcompania = ro.id_compania and g.insumo = ro.id and ro.tipo = 4  and g.fecha = ?
                INNER JOIN tipo_unidades_gestion tu ON g.unidadgestion = tu.id
 	              GROUP BY g.unidadgestion order by ro.id, tu.funcion, concat(0,(select orden from tipo_unidades_gestion t where id = tu.idpa), tu.orden)*1 ");
                  $sel_unitot -> bind_param('s', $fecha);
@@ -121,7 +121,7 @@ else {
         <div class="divTable">
         <div class="divTableBody">
         <div class="divTableRow">
-        <div class="divTableCell" style="width: 150px;"><b>COSTOS<br>INDIRECTOS</b></div>
+        <div class="divTableCell rowHeader"><b>COSTOS<br>INDIRECTOS</b></div>
         <?php
         $h = 1;
         $c=0;
@@ -166,7 +166,7 @@ else {
                   $i=0;
                   $total=0;
                 endif;
-                echo $p==1?"<div class='divTableRow'><div class='divTableCell'>".$unidadgestionap."</div>":'';
+                echo $p==1?"<div class='divTableRow rowHeader'><div class='divTableCell'>".$unidadgestionap."</div>":'';
                 ?>
                 <div class="divTableCell number"><?php echo number_format($insumo, 2, ',', ' ')?></div>
               <?php

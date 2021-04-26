@@ -9,12 +9,9 @@ $compania= $_SESSION['compania'];
        <div class="card-content">
          <span class="card-title">Gestión Datos</span>
          <div class="row">
-           <a id ='new' class="btn-floating btn-large blue darken-4 left" style= "margin-left: 5px;"><i
-             class="material-icons">insert_drive_file</i></a>
-           <a id ='up' class="btn-floating btn-large blue left" style= "margin-left: 5px;"><i
-             class="material-icons">save</i></a>
-           <a id ='del' class="btn-floating btn-large red left" style= "margin-left: 5px;"><i
-             class="material-icons">delete</i></a>
+           <a id ='new' class="btn blue darken-4 left" style= "margin-left: 5px;">Nuevo</a>
+           <a id ='up' class="btn blue left" style= "margin-left: 5px;">Guardar</a>
+           <a id ='del' class="btn red left" style= "margin-left: 5px;">Borrar</a>
            <br>
              <br>
            </div>
@@ -29,7 +26,7 @@ $compania= $_SESSION['compania'];
                           $orgactual = null;
              ?>
              <input id = "OrgActual"type ="hidden" value="<?php echo $orgactual; ?>">
-             <input id = "comp"type ="hidden" value="<?php echo $compania; ?>">
+             <input id = "comp" type ="hidden" value="<?php echo $compania; ?>">
              <label for="organizacion">Organización</label>
                 <select id="organizacion"class="form-control">
                     <?php if($sel_org->affected_rows==0){
@@ -50,13 +47,17 @@ $compania= $_SESSION['compania'];
                 </select>
 
            </div>
+           <style media="screen">
+           .ui-datepicker-calendar {
+  display: none;
+  }
+           </style>
            <div id = "dvperiodo"class="col s2">
               <label for="periodo">Periodo</label>
-              <input id ="periodo" type="text" class = "datepicker" name="periodo" value="<?php echo ultimoPeriodo($compania, $orgactual) ?>">
+              <input id ="periodo" type="text" class = "datepickermonth" name="periodo" value="<?php echo ultimoPeriodo($compania, $orgactual) ?>">
             </div>
             <div class="col s1">
-              <a id ='sync' class="btn-floating btn-large green left" style= "margin-left: 5px;"><i
-                class="material-icons">sync</i></a>
+              <a id ='sync' class="btn green left" style= "margin-left: 5px;">Refrescar</a>
             </div>
          </div>
           <div class="row">

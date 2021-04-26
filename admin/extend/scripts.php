@@ -30,6 +30,47 @@
         close: 'Ok',
         closeOnSelect: false,
             });
+      /*  $('.datepickermonth').pickadate({
+          selectMonths: true, // Creates a dropdown to control month
+          selectYears: 150, // Creates a dropdown of 15 years to control year
+          format: 'mmm-yyyy',
+          clear: 'Limpiar',
+          max: true,
+          isRTL:true,
+          onSet: function (arg) {
+          if ('select' in arg) { //prevent closing on selecting month/year
+            this.close();
+          }
+        }
+    });*/
+    $('.datepickermonth').pickadate({
+      selectMonths: true,
+      format: 'mmm-yyyy',
+      selectYears: true,
+      buttonImageOnly: false,
+      disable: [true],
+      today: false,
+      clear: false,
+      close: false,
+      onOpen: function() {
+        $(".picker__nav--prev, .picker__nav--next").remove();
+        $('.picker__table').remove();
+        $('.picker__weekday-display').remove();
+        $('.picker__day-display').remove();
+      },
+      onSet: function( arg ){
+        if(arg.highlight!== undefined){
+          var selectedMonth = parseInt(arg.highlight[1]);
+          var selectedYear = arg.highlight[0];
+          var selectedDate = arg.highlight[2];
+          this.set('select', [selectedYear, selectedMonth, selectedDate,{ format: 'yyyy/mm/dd' }]);
+        }
+
+
+        this.close();
+
+      }
+    });
       </script>
       <script type="text/javascript">
     //  $('#compania').material_select();

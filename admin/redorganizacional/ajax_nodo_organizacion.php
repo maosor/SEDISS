@@ -20,8 +20,11 @@ $idpa = htmlentities($_POST['id']);
   $sel -> bind_param('ii', $idpa, $compania);
   $sel -> execute();
   $sel -> bind_result($id, $descripcion,$complejidad,$poblacion );
+
+
 $hidden = false;
 if ($sel->fetch()) {
+    addlog('organizacion'.$id.$descripcion.$complejidad.$poblacion );
    $sel->close();
    $hidden = true;
  }
@@ -50,7 +53,9 @@ if ($sel->fetch()) {
       $sel_niv= $con->prepare("SELECT id, descripcion FROM red_organizacional where tipo = 2 AND id not in (SELECT DISTINCT idpa FROM red_organizacional where tipo = 2) AND id_compania = ? ORDER BY descripcion");
       $sel_niv -> bind_param('i', $compania);
       $sel_niv-> execute();
-      $sel_niv-> bind_result($nivid, $nivdescripcion ); ?>
+      $sel_niv-> bind_result($nivid, $nivdescripcion );
+            addlog($nivid.$nivdescripcion);
+      ?>
      <label for="complejidad">Nivel de complejidad</label>
         <select id="complejidad"class="form-control">
           <option value="<?php echo $complejidad?>" selected disabled><?php echo padre($complejidad,2)?></option>
@@ -83,7 +88,7 @@ if ($sel->fetch()) {
               <a class="collection-item" href="#!" id="<?php //echo $uniid?>"><?php //echo $unidescripcion?></a>
             <?php //endwhile;
           /*  $sel_uni ->close();*/?> -->
-            <?php categoryTree(0,'',$id); ?>
+            <?php categoryTree(unidadmenor($compania),'',$id); ?>
         </div>
    </div>
    <div class = "row">
@@ -91,7 +96,10 @@ if ($sel->fetch()) {
       $sel_uni_org= $con->prepare("SELECT ug.id, ug.descripcion FROM unidadgestion_organizacion uo INNER JOIN tipo_unidades_gestion ug ON uo.unidadgestion = ug.id WHERE uo.organizacion = ? AND ug.id_compania = ? ORDER BY ug.funcion, Concat(0,(select orden from tipo_unidades_gestion where id = ug.idpa), ug.orden)*1");
       $sel_uni_org -> bind_param('ii',$id,$compania);
       $sel_uni_org-> execute();
-      $sel_uni_org-> bind_result($uniorgid, $uniorgdescripcion ); ?>
+      $sel_uni_org-> bind_result($uniorgid, $uniorgdescripcion );
+      addlog($uniorgid.$uniorgdescripcion);
+       ?>
+
       <label for="unidadgestionorganizacion">Unidades de Gestión de la Organización</label>
       <a id ='rem' class="btn-floating  blue darken-4 right" style= "margin-left: 5px;" disabled><i
         class="material-icons">arrow_upward</i></a>

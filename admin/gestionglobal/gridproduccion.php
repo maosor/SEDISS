@@ -2,7 +2,8 @@
 include '../conexion/conexion.php';
 if($_POST){
   $organizacion=$_POST['organizacion'];
-  $fecha=$_POST['fecha'];
+  $fecha='01-'.$_POST['fecha'];
+  $fecha=date("Y-m-t", strtotime($fecha));
   $compania = $_SESSION['compania'];
 }
  ?>

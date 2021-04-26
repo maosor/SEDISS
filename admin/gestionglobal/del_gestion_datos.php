@@ -3,7 +3,8 @@ include '../conexion/conexion.php';
 include '../extend/funciones.php';
 if($_POST){
   $organizacion=$_POST['organizacion'];
-  $fecha=$_POST['fecha'];
+  $fecha='01-'.$_POST['fecha'];
+  $fecha=date("Y-m-t", strtotime($fecha));
   $accion=$_POST['accion'];
   $compania = $_SESSION['compania'];
   if($accion == '#insumos'){

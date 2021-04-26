@@ -39,7 +39,7 @@ else {
               </div>
             </div> -->
               <div class="divTableRow">
-                 <div class="divTableCell" style="width: 140px;"><b>PRODUCCION<br>HRS RRHH</b></div>
+                 <div class="divTableCell" style="width: 180px;"><b>PRODUCCION<br>HRS RRHH</b></div>
                 <?php $c=0;
                  while ($sel_unid ->fetch()):
                      ?>
@@ -89,11 +89,11 @@ else {
                   while ($sel_insum ->fetch()):
                     if($primerainteraccion)
                     {
-                     echo $primaria==1&&$i==0?"<div class='divTableRow'><div class='divTableCell sinBordeBottom' style='width: 140px;'>EGRESOS</div></div>":'';
-                     echo $primaria==2&&$i==0?"<div class='divTableRow'><div class='divTableCell sinBordeTop' style='width: 140px;'>CONSULTAS</div></div>":'';
-                     echo $primaria==0&&$i==0?"<div class='divTableRow'><div class='divTableCell' style='width: 140px;'>".$idin."</div></div>":'';
-                     echo $primaria==0&&$i==0?"<div class='divTableRow'><div class='divTableCell' style='width: 140px;'>Por egreso o consulta</div></div>":'';
-                     echo $primaria==0&&$i==0?"<div class='divTableRow'><div class='divTableCell' style='width: 140px;'>Por día paciente</div></div>":'';
+                     echo $primaria==1&&$i==0?"<div class='divTableRow'><div class='divTableCell sinBordeBottom' style='min-width: 180px;'>1ra UP</div></div>":'';
+                     echo $primaria==2&&$i==0?"<div class='divTableRow'><div class='divTableCell sinBordeTop' style='min-width: 180px;'>2da UP</div></div>":'';
+                     echo $primaria==0&&$i==0?"<div class='divTableRow'><div class='divTableCell' style='min-width: 180px;'>".$idin."</div></div>":'';
+                     echo $primaria==0&&$i==0?"<div class='divTableRow'><div class='divTableCell' style='min-width: 180px;'>Por egreso o consulta</div></div>":'';
+                     echo $primaria==0&&$i==0?"<div class='divTableRow'><div class='divTableCell' style='min-width: 180px;'>Por día paciente</div></div>":'';
 
 
                      echo  $primaria==1&&$i==0?"<div class='divTableCellg'>":'';

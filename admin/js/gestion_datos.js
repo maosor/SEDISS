@@ -43,7 +43,7 @@ if (esnuevo=="false")
 $('#organizacion').change (function () {
   //$('#periodo').val(document.write('<?php ultimoPeriodo(1,2)?>'));
   $("#dvperiodo").load(location.href + "recargarperiodo.php?org="+$('#organizacion').val()+"&com="+$('#comp').val());
-  window.setTimeout( cargaGrids, 500 );
+  window.setTimeout( cargaGrids, 1500 );
 })
 $('#new').click(function () {
   localStorage['Nuevo'] = true;
@@ -53,7 +53,6 @@ $('#produccion').load(location.href + "?id="+$("#organizacion").val() + " #produ
 $('#horas').load(location.href + "?id="+$("#organizacion").val()+ " #horas");
 //$( "#periodo" ).datepicker({dateFormat:"yy/mm/dd"}).datepicker("setDate",Date.now());
 //$('#periodo').val(new Date().toDateString());
-
 });
 $('#up').click(function() {
   // $.each([ 52, 97 ], function( index, value ) {
